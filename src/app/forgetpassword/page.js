@@ -16,7 +16,7 @@ const forgetpassword = () => {
       <input type="email" placeholder="Example1@gamil.com" />
     </div>
       
-    <button>Send Code</button>
+    <button className="send-btn">Send Code</button>
 
     <div className="logo">
         <img
