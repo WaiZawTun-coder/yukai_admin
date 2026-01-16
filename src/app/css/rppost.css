@@ -1,0 +1,21 @@
+.post-link-container {
+  display: flex;
+  align-items: center;
+}
+
+.view-post-link {
+  color: #2563eb; /* Modern Blue */
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 4px 8px;
+  background-color: #eff6ff;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.view-post-link:hover {
+  background-color: #dbeafe;
+  color: #1e40af;
+  text-decoration: underline;
+}

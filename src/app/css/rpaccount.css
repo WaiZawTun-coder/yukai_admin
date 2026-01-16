@@ -1,0 +1,22 @@
+.profile-link-box {
+  display: flex;
+  align-items: center;
+}
+
+.view-profile-link {
+  color: #2563eb;
+  background-color: #eff6ff;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #dbeafe;
+  transition: all 0.2s ease;
+}
+
+.view-profile-link:hover {
+  background-color: #dbeafe;
+  color: #1e40af;
+  text-decoration: underline;
+}

@@ -1,5 +1,10 @@
 @import url("./css/forgetpassword.css");
 @import url("./css/UsermanagementTable.css");
+@import url("./css/rpcomment.css");
+@import url("./css/rppost.css");
+@import url("./css/rpaccount.css");
+
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
