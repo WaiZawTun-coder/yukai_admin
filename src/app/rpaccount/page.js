@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 
 const ReportedTable = () => {
-  // Added profileUrl to the data
   const [reports, setReports] = useState([
     { id: "REP-882", profileUrl: "/profile/aungthuhein99", reason: "Harassment", reporter: "@aungthuhein99", status: "No Action" },
     { id: "REP-879", profileUrl: "/profile/aungthuhein99", reason: "Spam / Bot", reporter: "@aungthuhein99", status: "No Action" },
