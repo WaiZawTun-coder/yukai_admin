@@ -3,12 +3,35 @@
 @import url("./css/rpcomment.css");
 @import url("./css/rppost.css");
 @import url("./css/rpaccount.css");
+@import url("./css/sidebar.css");
 
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  
+  /* Deep Navy Backgrounds */
+  --gradient-sidebar: linear-gradient(180deg, #0a2538 0%, #051928 100%);
+  --surface-1: rgba(255, 255, 255, 0.05); /* Profile card bg */
+  --surface-2: #081d2c; /* Toggle bg */
+  --surface-3: rgba(177, 201, 239, 0.12); /* Hover state */
+  
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #b0c4d0;
+  --text-muted: #78909c;
+  
+  /* Accents & Borders */
+  --accent-color: #3b82f6;
+  --border-soft: rgba(255, 255, 255, 0.08);
+  --divider: rgba(255, 255, 255, 0.1);
+  
+  /* Active State (The Blue Box) */
+  --active-bg: rgba(177, 201, 239, 0.18);
+  --active-border: rgba(255, 255, 255, 0.15);
 }
+
+
 
 @media (prefers-color-scheme: dark) {
   :root {
