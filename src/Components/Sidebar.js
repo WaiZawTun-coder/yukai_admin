@@ -9,6 +9,8 @@ import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
 import GroupOutlinedIcon from "@mui/icons-material/GroupOutlined";
 import GroupRoundedIcon from "@mui/icons-material/GroupRounded";
+import SupervisedUserCircleOutlinedIcon from '@mui/icons-material/SupervisedUserCircleOutlined';
+import SupervisedUserCircleRoundedIcon from '@mui/icons-material/SupervisedUserCircleRounded';
 import ReportOutlinedIcon from "@mui/icons-material/ReportOutlined";
 import ReportRoundedIcon from "@mui/icons-material/ReportRounded";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
@@ -16,9 +18,10 @@ import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 
 const adminMenuList = [
   { id: 1, name: "Dashboard", icon: DashboardOutlinedIcon, activeIcon: DashboardRoundedIcon, link: "/" },
-  { id: 2, name: "User Management", icon: GroupOutlinedIcon, activeIcon: GroupRoundedIcon, link: "/user-management" },
-  { id: 3, name: "Reports", icon: ReportOutlinedIcon, activeIcon: ReportRoundedIcon, link: "/reports" },
-  { id: 4, name: "Settings", icon: SettingsOutlinedIcon, activeIcon: SettingsRoundedIcon, link: "/settings" },
+  { id: 2, name: "Admin Management", icon: SupervisedUserCircleOutlinedIcon, activeIcon: SupervisedUserCircleRoundedIcon, link: "/admin-management"},
+  { id: 3, name: "User Management", icon: GroupOutlinedIcon, activeIcon: GroupRoundedIcon, link: "/user-management" },
+  { id: 4, name: "Reports", icon: ReportOutlinedIcon, activeIcon: ReportRoundedIcon, link: "/reports" },
+  { id: 5, name: "Settings", icon: SettingsOutlinedIcon, activeIcon: SettingsRoundedIcon, link: "/settings" },
 ];
 
 const AdminSidebar = () => {

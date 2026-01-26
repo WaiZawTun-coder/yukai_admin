@@ -109,21 +109,16 @@
   letter-spacing: 1px;
 }
 
-.status-label.no-action {
-  color: #ef4444; 
-}
+.status-label.pending {color: #d6fb03; }
+.status-label.ignored {color: #7f8080; }
+.status-label.unbanned {color: #0455d8; }
 
-.status-label.no-action .status-dot {
-  background-color: #ef4444; 
-}
 
-.status-label.resolved {
-  color: #22c55e; 
-}
+.status-label.pending .status-dot {background-color: #d6fb02; }
+.status-label.ignored .status-dot {background-color: #7f8080; }
+.status-label.unbanned .status-dot {background-color: #0455d8; }
 
-.status-label.resolved .status-dot {
-  background-color: #22c55e; 
-}
+
 
 
 
