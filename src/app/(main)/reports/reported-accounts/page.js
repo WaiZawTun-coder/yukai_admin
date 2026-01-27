@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import ReportsNav from "../ReportsNav";
+
 
 const ReportedTable = () => {
   const [reports, setReports] = useState([
@@ -62,9 +64,7 @@ const ReportedTable = () => {
   return (
     <div className="table-main-area">
       <div className="table-container">
-        <div className="table-header">
-          <h2>Reported Account Overview</h2>
-        </div>
+        <ReportsNav />
 
         <table className="user-table">
           <thead>

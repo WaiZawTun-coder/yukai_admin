@@ -20,7 +20,7 @@ const adminMenuList = [
   { id: 1, name: "Dashboard", icon: DashboardOutlinedIcon, activeIcon: DashboardRoundedIcon, link: "/" },
   { id: 2, name: "Admin Management", icon: SupervisedUserCircleOutlinedIcon, activeIcon: SupervisedUserCircleRoundedIcon, link: "/admin-management"},
   { id: 3, name: "User Management", icon: GroupOutlinedIcon, activeIcon: GroupRoundedIcon, link: "/user-management" },
-  { id: 4, name: "Reports", icon: ReportOutlinedIcon, activeIcon: ReportRoundedIcon, link: "/reports" },
+  { id: 4, name: "Reports", icon: ReportOutlinedIcon, activeIcon: ReportRoundedIcon, link: "/reports/reported-accounts" },
   { id: 5, name: "Settings", icon: SettingsOutlinedIcon, activeIcon: SettingsRoundedIcon, link: "/settings" },
 ];
 
@@ -57,17 +57,19 @@ const AdminSidebar = () => {
       {/* MENU LIST */}
       <ul className="menu">
         {adminMenuList.map((item) => {
-          const isActive = pathname === item.link;
-          const Icon = isActive ? item.activeIcon : item.icon;
+            const isActive = item.link === "/reports/reported-accounts"
+                  ? pathname.startsWith("/reports")
+                  : pathname === item.link;
+            const Icon = isActive ? item.activeIcon : item.icon;
 
-          return (
-            <Link key={item.id} href={item.link} style={{ textDecoration: 'none' }}>
+            return (
+            <Link key={item.id} href={item.link} style={{ textDecoration: "none" }}>
               <li className={isActive ? "active" : ""}>
-                <Icon className="menu-icon" />
-                <span>{item.name}</span>
+              <Icon className="menu-icon" />
+              <span>{item.name}</span>
               </li>
             </Link>
-          );
+             );
         })}
       </ul>
 

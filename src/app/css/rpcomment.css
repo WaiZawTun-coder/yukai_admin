@@ -47,7 +47,7 @@
 
 .report-preview {
   font-size: 13px;
-  color: #475569;
+  color: #f9fbfc;
   font-style: italic;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -68,7 +68,7 @@
 }
 
 .full-comment-box {
-  background: #f8fafc;
+  background: #04315f66;
   padding: 16px;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
@@ -78,7 +78,7 @@
 }
 
 .full-comment-box p {
-  color: #1e293b !important;
+  color: #f8f8f9d4 !important;
   line-height: 1.6;
   font-weight: 400 !important;
 }
@@ -110,12 +110,12 @@
 }
 
 .status-label.pending {color: #d6fb03; }
-.status-label.ignored {color: #7f8080; }
+.status-label.ignored {color: #e0e0e0; }
 .status-label.unbanned {color: #0455d8; }
 
 
 .status-label.pending .status-dot {background-color: #d6fb02; }
-.status-label.ignored .status-dot {background-color: #7f8080; }
+.status-label.ignored .status-dot {background-color: #e0e0e0; }
 .status-label.unbanned .status-dot {background-color: #0455d8; }
 
 

@@ -1,0 +1,49 @@
+/* Header with Navigation Tabs */
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+/* Title */
+.report-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Navigation container */
+.report-nav {
+  display: flex;
+  gap: 6px;
+  background: #374151;
+  padding: 4px;
+  border-radius: 10px;
+}
+
+/* Tabs */
+.report-tab {
+  padding: 6px 14px;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover */
+.report-tab:hover {
+  background: #4a5568;
+  color: var(--text-primary);
+}
+
+/* Active */
+.report-tab.active {
+  background: var(--active-bg);
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}

@@ -1,8 +1,6 @@
 "use client";
 import React, { useState } from "react";
 
-
-
 const UserTable = () => {
   const [users, setUsers] = useState([
     { id: "1024", username: "@kaung", displayName: "Kaung Thant", status: "Active", photo: "./images/S&RcatPfp.jpg" },
@@ -48,14 +46,15 @@ const UserTable = () => {
               <th>Action</th>
             </tr>
           </thead>
+
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td><div className="uid">{user.id}</div></td>
-                <td><div className="username">{user.username}</div></td>
-                <td><div className="display-name">{user.displayName}</div></td>
+                <td className="uid">{user.id}</td>
+                <td className="username">{user.username}</td>
+                <td className="display-name">{user.displayName}</td>
                 <td>
-                  <img src={user.photo} alt={user.displayName} className="profile-img" />
+                  <img src={user.photo} className="profile-img" />
                 </td>
                 <td>
                   <span className={`status-label ${user.status.toLowerCase()}`}>
@@ -68,7 +67,7 @@ const UserTable = () => {
                     className={user.status === "Active" ? "btn-ban" : "btn-unban"}
                     onClick={() => setConfirmUser(user)}
                   >
-                    {user.status === "Active" ? "Ban" : "Un Ban"}
+                    {user.status === "Active" ? "Ban" : "UnBan"}
                   </button>
                 </td>
               </tr>
@@ -77,19 +76,26 @@ const UserTable = () => {
         </table>
       </div>
 
-      {/* Confirmation Popup */}
       {confirmUser && (
         <div className="modal-overlay">
           <div className="modal">
             <h3>Confirm Action</h3>
-            <p>Are you sure you want to <strong>{confirmUser.status === "Active" ? "Ban" : "Unban"}</strong> {confirmUser.displayName}?</p>
+            <p>
+              Are you sure you want to{" "}
+              <strong>{confirmUser.status === "Active" ? "Ban" : "Unban"}</strong>{" "}
+              {confirmUser.displayName}?
+            </p>
             <div className="modal-actions">
-              <button className="btn-cancel" onClick={() => setConfirmUser(null)}>Cancel</button>
+              <button className="btn-cancel" onClick={() => setConfirmUser(null)}>
+                Cancel
+              </button>
               <button
-                className={confirmUser.status === "Active" ? "btn-danger" : "btn-success"}
+                className={
+                  confirmUser.status === "Active" ? "btn-danger" : "btn-success"
+                }
                 onClick={confirmToggleStatus}
               >
-                {confirmUser.status === "Active"? "Yes, Ban" : "Yes, UnBan"}
+                {confirmUser.status === "Active" ? "Yes, Ban" : "Yes, UnBan"}
               </button>
             </div>
           </div>
@@ -100,7 +106,3 @@ const UserTable = () => {
 };
 
 export default UserTable;
-
-
-
-
