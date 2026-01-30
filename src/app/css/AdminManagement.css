@@ -1,0 +1,71 @@
+/* Header layout */
+.admin-table-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Create Admin Button */
+.btn-create-admin {
+  background-color: #4e84f9;
+  color: rgb(222, 221, 221);
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 550;
+}
+
+.btn-create-admin:hover {
+  background-color: #3c6bd0;
+  color: white;
+}
+
+/* Form */
+.create-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.create-admin-form input {
+  background-color: white;
+  color: #041d54;
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+}
+
+.create-admin-form input:focus {
+  outline: none;
+  border-color: #041d54;
+}
+
+/* Modal base (reuse-safe) */
+.create-admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 0, 0, 0.32);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.create-admin-modal {
+  background: rgb(216, 215, 215);
+  padding: 24px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.create-admin-modal h3{
+    color: #041d54;
+}
+
+
