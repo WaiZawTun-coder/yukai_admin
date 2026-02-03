@@ -1,0 +1,87 @@
+:root {
+  --sidebar-width: 350px;
+  --bg-main: #0f172a;
+  --bg-card: #1e293b;
+  --text-main: #ffffff;
+}
+
+/* PAGE */
+.dashboard-page {
+  margin-left: var(--sidebar-width);
+  width: calc(100vw - var(--sidebar-width));
+  min-height: 100vh;
+  padding: 24px;
+  background: var(--bg-main);
+  color: var(--text-main);
+  overflow-x: hidden;
+}
+
+/* ================= */
+/* DASHBOARD CARDS   */
+/* ================= */
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  gap: 20px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.dashboard-card {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.dashboard-card p {
+  opacity: 0.8;
+  margin-bottom: 6px;
+}
+
+.dashboard-card h2 {
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 600;
+}
+
+/* ================= */
+/* CHARTS (2 COLUMNS)*/
+/* ================= */
+
+.charts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* ALWAYS 2 COLUMNS */
+  gap: 20px;
+}
+
+.chart-box {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 12px;
+  width: 100%;
+}
+
+.chart-box h4 {
+  margin-bottom: 12px;
+}
+
+/* ========================= */
+/* SMALL PC / LAPTOP SCREENS */
+/* ========================= */
+
+@media (max-width: 1024px) {
+  .dashboard-page {
+    margin-left: 0;
+    width: 100vw;
+  }
+
+  /* cards still stay in one row */
+  .dashboard-cards {
+    grid-template-columns: repeat(3, minmax(180px, 1fr));
+  }
+
+  /* charts become single column only on small screens */
+  .charts {
+    grid-template-columns: 1fr;
+  }
+}

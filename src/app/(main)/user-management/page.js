@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useMemo, useRef, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 
 export default function Page() {
   const [users, setUsers] = useState([
@@ -18,24 +18,17 @@ export default function Page() {
   ]);
 
   const [confirmUser, setConfirmUser] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState("");
-  const [sortBy, setSortBy] = useState("id");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [showSortMenu, setShowSortMenu] = useState(false);
 
-  const sortRef = useRef(null);
-
-  // Close sort menu on outside click
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (sortRef.current && !sortRef.current.contains(e.target)) {
-        setShowSortMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  
+  const filteredUsers = useMemo(() => {
+    const term = searchTerm.toLowerCase();
+    return users.filter((user) =>
+      user.id.includes(term) ||
+      user.username.toLowerCase().includes(term) ||
+      user.displayName.toLowerCase().includes(term)
+    );
+  }, [users, searchTerm]);
 
   const confirmToggleStatus = () => {
     setUsers((prev) =>
@@ -48,108 +41,22 @@ export default function Page() {
     setConfirmUser(null);
   };
 
-  //  Filter + Sort logic
-  const filteredUsers = useMemo(() => {
-    let filtered = users.filter((user) => {
-      const term = searchTerm.toLowerCase();
-      return (
-        user.id.includes(term) ||
-        user.username.toLowerCase().includes(term) ||
-        user.displayName.toLowerCase().includes(term)
-      );
-    });
-
-    filtered.sort((a, b) => {
-      let value = 0;
-
-      if (sortBy === "name") {
-        value = a.displayName.localeCompare(b.displayName);
-      } else if (sortBy === "status") {
-        value = a.status.localeCompare(b.status);
-      } else {
-        value = Number(a.id) - Number(b.id);
-      }
-
-      return sortOrder === "asc" ? value : -value;
-    });
-
-    return filtered;
-  }, [users, searchTerm, sortBy, sortOrder]);
-
   return (
     <div className="table-main-area">
       <div className="table-container">
+
         {/* HEADER */}
         <div className="table-header">
           <h2>User Management Overview</h2>
 
-          <div className="table-controls">
-            {/* SEARCH */}
-            <input
-              type="text"
-              className="search-input"
-              placeholder="Search by ID,Username,Name..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-
-            {/* SORT MENU */}
-            <div className="sort-wrapper" ref={sortRef}>
-              <button
-                className="sort-trigger"
-                onClick={() => setShowSortMenu((prev) => !prev)}
-              >
-                Sort <span className="sort-icon">⇅</span>
-              </button>
-
-              {showSortMenu && (
-                <div className="sort-menu">
-                  <div className="sort-section">
-                    <p className="sort-title">Sort by</p>
-
-                    <button
-                      className={sortBy === "name" ? "active" : ""}
-                      onClick={() => setSortBy("name")}
-                    >
-                      Name
-                    </button>
-
-                    <button
-                      className={sortBy === "id" ? "active" : ""}
-                      onClick={() => setSortBy("id")}
-                    >
-                      ID
-                    </button>
-
-                    <button
-                      className={sortBy === "status" ? "active" : ""}
-                      onClick={() => setSortBy("status")}
-                    >
-                      Status
-                    </button>
-                  </div>
-
-                  <div className="sort-divider" />
-
-                  <div className="sort-section">
-                    <button
-                      className={sortOrder === "asc" ? "active" : ""}
-                      onClick={() => setSortOrder("asc")}
-                    >
-                       Ascending
-                    </button>
-
-                    <button
-                      className={sortOrder === "desc" ? "active" : ""}
-                      onClick={() => setSortOrder("desc")}
-                    >
-                       Descending
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* SEARCH */}
+          <input
+            type="text"
+            className="search-input"
+            placeholder="Search by ID, Username, Name..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
 
         {/* TABLE */}
@@ -167,7 +74,6 @@ export default function Page() {
 
           <tbody>
             {filteredUsers.map((user) => (
-              
               <tr key={user.id}>
                 <td className="uid">{user.id}</td>
                 <td className="username">{user.username}</td>
@@ -180,7 +86,6 @@ export default function Page() {
                     <span className="status-dot"></span>
                     {user.status}
                   </span>
-
                 </td>
                 <td>
                   <button

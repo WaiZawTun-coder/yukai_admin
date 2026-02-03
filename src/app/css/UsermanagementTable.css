@@ -3,7 +3,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-  overflow: hidden; /* no page scroll */
+   /* no page scroll */
 }
 
 /* Header layout */
@@ -24,10 +24,10 @@ body {
 .search-input {
   padding: 8px 12px;
   border-radius: 17px;
-  background-color: rgb(215, 213, 213);
+  background-color: rgb(236, 234, 234);
   border: 2px solid #f4f6f9;
   font-size: 14px;
-  width: 220px;
+  width: 300px;
 }
 
 .search-input:focus {
@@ -142,6 +142,7 @@ body {
   display: flex;
   width: 100%;
   min-height: 100vh;
+  background-color: #0f1e36b3 ;
 }
 
 .sidebar {
@@ -342,11 +343,6 @@ body {
 .btn-ban:hover { background-color: #dc2626; } 
 .btn-unban:hover { background-color: #2563eb; }
 
-.btn-ban:active,
-.btn-unban:active,
-.btn-ignore:active {
-  color: var(--active-bg);
-}
 
 /* ================= MODAL ================= */
 /* Modal Styles */
@@ -402,6 +398,7 @@ body {
 .btn-danger:hover,
 .btn-success:hover {
   color: var(--text-primary);
+  transform: translateY(-1px);
   opacity: 0.8;
 }
 
@@ -409,6 +406,7 @@ body {
 .btn-danger:active,
 .btn-success:active {
   color: var(--active-bg);
+  transform: translateY(-1px);
 }
 
 .btn-cancel { background: #9aa1adbb; color: white;}

@@ -1,0 +1,147 @@
+* {
+  box-sizing: border-box;
+}
+
+/* ===== MAIN AREA ===== */
+.settings-wrapper {
+  margin-left: 25%;
+  padding: 30px;
+  min-height: 100vh;
+  background: #0e2a3b;
+  border-radius: 10px;
+}
+
+/* ===== SETTINGS PAGE ===== */
+.settings-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  color: #eaf4fb;
+}
+
+.page-title {
+  font-size: 26px;
+  margin-bottom: 25px;
+  color: #b6cddc;
+  font-weight: 700;
+}
+
+/* ===== GRID ===== */
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+/* ===== CARD ===== */
+.settings-card {
+  background: #143a52;
+  padding: 22px;
+  border-radius: 16px;
+}
+
+.settings-card h2 {
+  margin-bottom: 18px;
+  font-size: 18px;
+}
+
+/* ===== FORM ===== */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 13px;
+  color: #9fb7c7;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #0e2a3b;
+  color: #ffffff;
+}
+
+/* ===== TOGGLE ===== */
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.toggle-row p {
+  font-size: 12px;
+  color: #9fb7c7;
+}
+
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+  cursor: pointer;
+  top: -6px;
+  margin-left: 5px; 
+}
+
+.switch input {
+  display: none;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #425f73;
+  border-radius: 30px;
+  transition: 0.4s;
+  
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #ffffff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background: #3ea8d5;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+/* ===== SAVE BUTTON ===== */
+.save-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #4da3ff, #2b7bdc);
+  border: none;
+  border-radius: 14px;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.save-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
