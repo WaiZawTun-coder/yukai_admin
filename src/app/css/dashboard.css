@@ -1,11 +1,21 @@
 :root {
   --sidebar-width: 350px;
-  --bg-main: #0f172a;
-  --bg-card: #1e293b;
+
+  /* base colors */
+  --bg-main: #0b1220;
+  --bg-card-dark: #081c2f;
+  --bg-card-mid: #0d2a44;
+  --bg-card-light: #123a5a;
+
   --text-main: #ffffff;
+  --text-muted: #9fb6cc;
+  --accent-blue: #4aa3ff;
 }
 
-/* PAGE */
+/* ================= */
+/* PAGE              */
+/* ================= */
+
 .dashboard-page {
   margin-left: var(--sidebar-width);
   width: calc(100vw - var(--sidebar-width));
@@ -24,45 +34,88 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
   gap: 20px;
-  margin-bottom: 16px;
+  margin-bottom: 20px;
   text-align: center;
+  cursor: pointer;
 }
 
 .dashboard-card {
-  background: var(--bg-card);
-  padding: 20px;
-  border-radius: 12px;
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    var(--bg-card-dark) 0%,
+    var(--bg-card-mid) 45%,
+    var(--bg-card-light) 100%
+  );
+  padding: 22px;
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(2, 8, 23, 0.7);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+}
+
+/* soft highlight */
+.dashboard-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(77, 164, 252, 0.18),
+    transparent
+  );
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 44px rgba(2, 8, 23, 0.9);
 }
 
 .dashboard-card p {
-  opacity: 0.8;
+  font-size: 13px;
+  letter-spacing: 0.6px;
+  color: var(--text-muted);
   margin-bottom: 6px;
+  text-transform: uppercase;
 }
 
 .dashboard-card h2 {
-  font-size: clamp(20px, 2.5vw, 28px);
-  font-weight: 600;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 700;
+  color: #e6f2ff;
 }
 
 /* ================= */
-/* CHARTS (2 COLUMNS)*/
+/* CHARTS (MATCHED)  */
 /* ================= */
 
 .charts {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* ALWAYS 2 COLUMNS */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+ cursor: pointer;
   gap: 20px;
 }
 
 .chart-box {
-  background: var(--bg-card);
+  background: linear-gradient(
+    135deg,
+    #081c2f 0%,
+    #0d2a44 50%,
+    #0b2238 100%
+  );
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 14px;
   width: 100%;
+  box-shadow: 0 10px 28px rgba(2, 8, 23, 0.65);
 }
 
 .chart-box h4 {
   margin-bottom: 12px;
+  color: #cfe6ff;
 }
 
 /* ========================= */
@@ -75,12 +128,10 @@
     width: 100vw;
   }
 
-  /* cards still stay in one row */
   .dashboard-cards {
     grid-template-columns: repeat(3, minmax(180px, 1fr));
   }
 
-  /* charts become single column only on small screens */
   .charts {
     grid-template-columns: 1fr;
   }

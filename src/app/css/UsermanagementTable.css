@@ -3,7 +3,7 @@ html,
 body {
   margin: 0;
   padding: 0;
-   /* no page scroll */
+   
 }
 
 /* Header layout */
@@ -409,6 +409,6 @@ body {
   transform: translateY(-1px);
 }
 
-.btn-cancel { background: #9aa1adbb; color: white;}
+.btn-cancel { background: #325394d4; color: white;}
 .btn-danger { background: #ef4444; color: white; }
 .btn-success { background: #22c55e; color: white; }
