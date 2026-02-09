@@ -1,10 +1,10 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "../context/AuthContext"; 
 
-// Material UI Icons
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import DashboardOutlinedIcon from "@mui/icons-material/DashboardOutlined";
 import DashboardRoundedIcon from "@mui/icons-material/DashboardRounded";
@@ -28,54 +28,39 @@ const adminMenuList = [
 
 const AdminSidebar = () => {
   const pathname = usePathname();
-  const router = useRouter();
+  const { user, logout } = useAuth(); 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
-
-  const user = { username: "admin", display_name: "Admin", gender: "male" };
-
-  const handleLogout = () => {
-  
-    localStorage.removeItem("token");
-    router.push("/login");
-  };
 
   return (
     <>
       <div className="sidebar">
-        {/* LOGO */}
         <div className="header-logo">
-          <small>yukai</small>
-          愉快
+          <small>yukai</small>愉快
         </div>
 
-        {/* PROFILE */}
+  
         <Link href="/admin/profile" style={{ textDecoration: "none" }}>
           <div className="profile">
             <Image
-              src={`/images/default-profiles/${user.gender}.jpg`}
+            
+              src={user?.profile_image || `/images/default-profiles/${user?.gender || 'male'}.jpg`}
               alt="profile"
               width={52}
               height={52}
             />
             <div className="info">
-              <h4>{user.display_name}</h4>
-              <p>@{user.username}</p>
+              <h4>{user?.display_name || "Admin"}</h4> 
+              <p>@{user?.username || "admin"}</p>
             </div>
           </div>
         </Link>
 
         <hr className="profile-horizontal-bar" />
 
-        {/* MENU */}
         <ul className="menu">
           {adminMenuList.map((item) => {
-            const isActive =
-              item.link === "/reports/reported-accounts"
-                ? pathname.startsWith("/reports")
-                : pathname === item.link;
-
+            const isActive = item.link === "/reports/reported-accounts" ? pathname.startsWith("/reports") : pathname === item.link;
             const Icon = isActive ? item.activeIcon : item.icon;
-
             return (
               <Link key={item.id} href={item.link} style={{ textDecoration: "none" }}>
                 <li className={isActive ? "active" : ""}>
@@ -85,34 +70,25 @@ const AdminSidebar = () => {
               </Link>
             );
           })}
-
-          {/* LOGOUT */}
           <li className="logout-item" onClick={() => setShowLogoutModal(true)}>
             <LogoutRoundedIcon className="menu-icon" />
             <span>Logout</span>
           </li>
         </ul>
 
-        {/* THEME TOGGLE */}
         <div className="toggle">
           <DarkModeRoundedIcon style={{ fontSize: "20px", color: "#fff" }} />
         </div>
       </div>
 
-      {/* ===== LOGOUT CONFIRM MODAL ===== */}
       {showLogoutModal && (
         <div className="logout-modal-overlay">
           <div className="logout-modal">
             <h3>Confirm Logout</h3>
-            <p>Are you sure you want to <strong>logout </strong>?</p>
-
+            <p>Are you sure you want to <strong>logout</strong>?</p>
             <div className="logout-modal-actions">
-              <button className="logout-btn-cancel" onClick={() => setShowLogoutModal(false)}>
-                Cancel
-              </button>
-              <button className="logout-btn-danger" onClick={handleLogout}>
-                Logout
-              </button>
+              <button className="logout-btn-cancel" onClick={() => setShowLogoutModal(false)}>Cancel</button>
+              <button className="logout-btn-danger" onClick={() => { logout(); setShowLogoutModal(false); }}>Logout</button>
             </div>
           </div>
         </div>

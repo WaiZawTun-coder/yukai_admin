@@ -2,10 +2,20 @@
 import { useState } from "react";
 import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
 import LockOutlineRoundedIcon from '@mui/icons-material/LockOutlineRounded';
+import { useAuth } from "../../context/AuthContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
+  const {login} = useAuth();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    login({username, password});
+  }
+ 
   return (
     <div className="login-page">
       <div className="login-card">
@@ -19,9 +29,9 @@ const Login = () => {
         <h1 className="title">Login To Administration</h1>
         <p className="subtitle">Welcome Back!</p>
 
-        <form className="login-form">
+        <form className="login-form" onSubmit={handleLogin}>
           <label>ADMIN NAME</label>
-          <input type="text" placeholder="Name" />
+          <input type="text" placeholder="Name" value={username} onChange={(e) => setUsername(e.target.value)}/>
 
           <label>PASSWORD</label>
 
@@ -30,6 +40,8 @@ const Login = () => {
             <input
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <span
               className="password-eye"

@@ -4,7 +4,7 @@ export default function Layout({ children }) {
   return (
     <div className="layout">
         <AdminSidebar />
-    {children}
+        {children}
     </div>
   );
 }
