@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { useApi } from "../../../utilities/api";
 
 
 const AdminTable = () => {
@@ -9,42 +10,131 @@ const AdminTable = () => {
       username: "@kaung",
       displayName: "Kaung Thant",
       status: "Active",
-      photo: "./images/S&RcatPfp.jpg",
+      photo: "./Images/S&RcatPfp.jpg",
     },
   ]);
+
+  const apiFetch = useApi();
 
   const [confirmAdmin, setConfirmAdmin] = useState(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
+  const [createError, setCreateError] = useState("");
+  const [creating, setCreating] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
+  const [adminBanError, setAdminBanError] = useState("")
+
   const [newAdmin, setNewAdmin] = useState({
     email: "",
-    username: "",
     displayName: "",
   });
 
-  const confirmToggleStatus = () => {
-    setAdmins((prev) =>
-      prev.map((admin) =>
-        admin.id === confirmAdmin.id
-          ? {
+  const filteredAdmins = admins.filter((admin) => {
+    const term = searchTerm.toLowerCase();
+
+    return (
+      admin.username.toLowerCase().includes(term) ||
+      admin.displayName.toLowerCase().includes(term) ||
+      String(admin.id).toLowerCase().includes(term)
+    );
+  });
+
+  const confirmToggleStatus = async (action = 'ban') => {
+    const res = await apiFetch(`/api/${action}-admin`, {
+      method: "POST",
+      body: { banned_admin_id: confirmAdmin.id }
+    });
+
+    if (res.status) {
+      setAdmins((prev) =>
+        prev.map((admin) =>
+          admin.id === confirmAdmin.id
+            ? {
               ...admin,
               status: admin.status === "Active" ? "Banned" : "Active",
             }
-          : admin
-      )
-    );
-    setConfirmAdmin(null);
+            : admin
+        )
+      );
+      setConfirmAdmin(null);
+    } else {
+      setAdminBanError(res.message);
+    }
   };
 
-  const handleCreateAdmin = (e) => {
+  const handleCreateAdmin = async (e) => {
     e.preventDefault();
 
-    console.log("Admin Request Sent:", newAdmin);
+    setCreateError("");
+    setCreating(true);
 
-    // Reset & close
-    setNewAdmin({ email: "", username: "", displayName: "" });
-    setShowCreateModal(false);
+    try {
+      const res = await apiFetch("/api/admin/register", {
+        method: "POST",
+        body: newAdmin
+      });
+
+      if (!res || !res.status) {
+        // API returned error
+        setCreateError(res?.message || "Failed to create admin");
+        return;
+      }
+
+      const createdAdmin = res.data;
+
+      setAdmins((prev) => [
+        ...prev,
+        {
+          id: createdAdmin.admin_id || createdAdmin.email,
+          username: "@" + createdAdmin.username,
+          displayName: createdAdmin.display_name,
+          status: createdAdmin.is_active == 1 ? "Active" : "Banned",
+          photo: "/Images/default-profiles/male.jpg"
+        }
+      ]);
+
+      // Success
+      setNewAdmin({ email: "", displayName: "" });
+      setShowCreateModal(false);
+
+      // Optional: reload admin list
+      // await getAdmin();  (if you move getAdmin outside useEffect)
+
+    } catch (error) {
+      console.error(error);
+      setCreateError("Server error. Please try again.");
+    } finally {
+      setCreating(false);
+    }
   };
+  const getAdmin = useCallback(async (page = 1) => {
+    try {
+      const res = await apiFetch(`/api/get-admin-lists?page=${page}`);
+
+      if (res?.status && res?.data) {
+        const formattedAdmins = res.data.map((admin, index) => ({
+          id: admin.admin_id || index,
+          username: "@" + admin.username,
+          displayName: admin.display_name,
+          status: admin.is_active == "1" ? "Active" : "Banned",
+          photo: admin.profile_image || "/Images/default-profiles/male.jpg"
+        }));
+
+        setAdmins(formattedAdmins);
+        setCurrentPage(res.current_page);
+        setTotalPages(res.total_pages);
+      }
+    } catch (error) {
+      console.error("Failed to fetch admins:", error);
+    }
+  }, [apiFetch])
+
+  useEffect(() => {
+    getAdmin(currentPage);
+  }, [apiFetch, getAdmin, currentPage]);
 
   return (
     <div className="table-main-area">
@@ -52,12 +142,22 @@ const AdminTable = () => {
         <div className="admin-table-header">
           <h2>Admin Management Overview</h2>
 
-          <button
-            className="btn-create-admin"
-            onClick={() => setShowCreateModal(true)}
-          >
-            Create Admin
-          </button>
+          <div className="admin-header-actions">
+            <input
+              type="text"
+              placeholder="Search by ID, username, or name..."
+              className="search-input"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+
+            <button
+              className="btn-create-admin"
+              onClick={() => setShowCreateModal(true)}
+            >
+              Create Admin
+            </button>
+          </div>
         </div>
 
         <table className="user-table">
@@ -73,8 +173,8 @@ const AdminTable = () => {
           </thead>
 
           <tbody>
-            {admins.map((admin) => (
-            <tr key={admin.id}>
+            {filteredAdmins.map((admin) => (
+              <tr key={admin.id}>
                 <td className="uid">{admin.id}</td>
                 <td className="username">{admin.username}</td>
                 <td className="display-name">{admin.displayName}</td>
@@ -101,8 +201,34 @@ const AdminTable = () => {
                 </td>
               </tr>
             ))}
+            {filteredAdmins.length === 0 && (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>
+                  No admins found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
+        <div className="pagination">
+          <button
+            disabled={currentPage === 1}
+            onClick={() => getAdmin(currentPage - 1)}
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            disabled={currentPage === totalPages}
+            onClick={() => getAdmin(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {/* Create Admin Modal */}
@@ -118,17 +244,7 @@ const AdminTable = () => {
                 value={newAdmin.email}
                 required
                 onChange={(e) =>
-                  setNewAdmin({ ...newAdmin, email: e.target.value })
-                }
-              />
-
-              <input
-                type="text"
-                placeholder="Username"
-                value={newAdmin.username}
-                required
-                onChange={(e) =>
-                  setNewAdmin({ ...newAdmin, username: e.target.value })
+                  setNewAdmin({ ...newAdmin, email: e.target.value }) || setCreateError("")
                 }
               />
 
@@ -138,9 +254,14 @@ const AdminTable = () => {
                 value={newAdmin.displayName}
                 required
                 onChange={(e) =>
-                  setNewAdmin({ ...newAdmin, displayName: e.target.value })
+                  setNewAdmin({ ...newAdmin, displayName: e.target.value }) || setCreateError("")
                 }
               />
+              {createError && (
+                <div className="form-error">
+                  {createError}
+                </div>
+              )}
 
               <div className="modal-actions">
                 <button
@@ -151,8 +272,8 @@ const AdminTable = () => {
                   Cancel
                 </button>
 
-                <button type="submit" className="btn-success">
-                  Create
+                <button type="submit" className="btn-success" disabled={creating}>
+                  {creating ? "Creating..." : "Create"}
                 </button>
               </div>
             </form>
@@ -173,10 +294,20 @@ const AdminTable = () => {
               {confirmAdmin.displayName}?
             </p>
 
+
+            {adminBanError && (
+              <div className="form-error">
+                {adminBanError}
+              </div>
+            )}
+
             <div className="modal-actions">
               <button
                 className="btn-cancel"
-                onClick={() => setConfirmAdmin(null)}
+                onClick={() => {
+                  setAdminBanError("");
+                  setConfirmAdmin(null);
+                }}
               >
                 Cancel
               </button>
@@ -187,7 +318,7 @@ const AdminTable = () => {
                     ? "btn-danger"
                     : "btn-success"
                 }
-                onClick={confirmToggleStatus}
+                onClick={() => confirmToggleStatus(confirmAdmin.status == "Active" ? "ban" : "unban")}
               >
                 Confirm
               </button>

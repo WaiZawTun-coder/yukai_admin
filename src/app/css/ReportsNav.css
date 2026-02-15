@@ -47,3 +47,74 @@
   color: var(--text-primary);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
+
+.status-label.reviewed {
+  background-color: #2196f3;
+}
+.status-label.banned {
+  background-color: #f44336;
+}
+.status-label.warned {
+  background-color: #ff9800;
+}
+.status-label.suspended {
+  background-color: #9c27b0;
+}
+
+/* Buttons */
+.action-gap button {
+  margin-right: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-ignore {
+  background-color: #9e9e9e;
+  color: #fff;
+}
+
+.btn-ignore:hover {
+  background-color: #757575;
+}
+
+.btn-ban {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.btn-ban:hover {
+  background-color: #d32f2f;
+}
+
+.btn-unban {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.btn-unban:hover {
+  background-color: #388e3c;
+}
+
+.btn-warned,
+.btn-warn {
+  background-color: #ff9800;
+  color: #fff;
+}
+
+.btn-warn:hover {
+  background-color: #fb8c00;
+}
+
+.btn-suspend {
+  background-color: #9c27b0;
+  color: #fff;
+}
+
+.btn-suspend:hover {
+  background-color: #7b1fa2;
+}

@@ -32,17 +32,17 @@
 }
 
 .create-admin-form input {
-  background-color: white;
-  color: #041d54;
+  background-color: var(--surface-3);
+  color: var(--text-color);
   padding: 10px 12px;
   border-radius: 6px;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--accent-color);
   font-size: 14px;
 }
 
 .create-admin-form input:focus {
   outline: none;
-  border-color: #041d54;
+  border-color: var(--primary-color);
 }
 
 /* Modal base (reuse-safe) */
@@ -57,15 +57,18 @@
 }
 
 .create-admin-modal {
-  background: rgb(216, 215, 215);
+  background: var(--secondary-color);
   padding: 24px;
   border-radius: 10px;
   width: 100%;
   max-width: 350px;
 }
 
-.create-admin-modal h3{
-    color: #041d54;
+.create-admin-modal h3 {
+  color: var(--text-color);
 }
 
-
+.form-error {
+  color: var(--status-error);
+  background-color: var(--surface-3);
+}

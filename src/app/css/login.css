@@ -7,7 +7,6 @@
 .login-page {
   width: 100%;
   min-height: 80vh;
-  background: linear-gradient(135deg, #e0e7ff, #f8fafc);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -17,12 +16,13 @@
 /* CARD */
 .login-card {
   width: 420px;
-  background: #ffffff;
+  background: var(--secondary-color);
   padding: 40px;
   border-radius: 16px;
   text-align: center;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   position: relative;
+  color: var(--text-color);
 }
 
 .decor-image {
@@ -34,12 +34,12 @@
 .title {
   font-size: 36px;
   font-weight: 700;
-  color: #1e3a8a;
+  color: var(--text-color);
 }
 
 .subtitle {
   font-size: 15px;
-  color: #193379;
+  color: var(--text-color);
   margin-bottom: 34px;
   font-weight: 700;
 }
@@ -51,7 +51,7 @@
 
 .login-form label {
   font-size: 12px;
-  color: #193379;
+  color: var(--text-color);
   letter-spacing: 1px;
   font-weight: 600;
 }
@@ -60,11 +60,15 @@
   width: 100%;
   padding: 12px;
   margin: 8px 0 20px;
-  color: #193379;
+  color: var(--text-color);
   border: none;
-  background-color: #ebeaea;
+  background-color: var(--surface-3);
   border-radius: 4px;
   font-size: 14px;
+}
+
+.login-form input::placeholder {
+  color: var(--text-color);
 }
 
 .login-form input:focus {
@@ -73,7 +77,6 @@
   box-shadow:
     0 0 0 2px rgba(37, 99, 235, 0.25),
     0 0 0 5px rgba(37, 99, 235, 0.12);
-  background-color: #ebeaea;
 }
 
 
@@ -108,7 +111,7 @@
   width: 100%;
   padding: 12px;
   background: #2563eb;
-  color: #fff;
+  color: var(--text-color);
   border: none;
   border-radius: 4px;
   font-size: 15px;
@@ -152,4 +155,13 @@
   .title {
     font-size: 26px;
   }
+}
+
+.error-message {
+  color: #e53935;
+  background: #fdecea;
+  padding: 8px;
+  border-radius: 6px;
+  margin: 10px 0;
+  font-size: 14px;
 }

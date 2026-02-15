@@ -1,34 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import ReportsNav from "../ReportsNav";
+import { useApi } from "../../../../utilities/api";
 
 const ReportedTable = () => {
-  const [reports, setReports] = useState([
-    {
-      id: "REP-882",
-      postUrl: "#",
-      reason: "Harassment",
-      reporter: "@aungthuhein99",
-      status: "Pending",
-      actionStage: "pending",
-    },
-    {
-      id: "REP-879",
-      postUrl: "#",
-      reason: "Spam / Bot",
-      reporter: "@aungthuhein99",
-      status: "Pending",
-      actionStage: "pending",
-    },
-    {
-      id: "REP-875",
-      postUrl: "#",
-      reason: "Copyright",
-      reporter: "@aungthuhein99",
-      status: "Pending",
-      actionStage: "pending",
-    },
-  ]);
+  const apiFetch = useApi();
+  const [reports, setReports] = useState([]);
+  const [isFetchingReports, setIsFetchingReports] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   const [confirmAction, setConfirmAction] = useState({
     reportId: null,
@@ -40,27 +20,77 @@ const ReportedTable = () => {
     setConfirmAction({ reportId: null, nextStage: null, label: "" });
   };
 
-  const applyAction = () => {
-    setReports((prev) =>
-      prev.map((r) =>
-        r.id === confirmAction.reportId
-          ? {
-              ...r,
-              actionStage: confirmAction.nextStage,
-              status:
-                confirmAction.nextStage.charAt(0).toUpperCase() +
-                confirmAction.nextStage.slice(1),
-            }
-          : r
-      )
-    );
-    resetConfirm();
+  const fetchReports = useCallback(
+    async (page = 1) => {
+      try {
+        setIsFetchingReports(true);
+
+        const res = await apiFetch(
+          `/api/get-reported-posts?page=${page}&limit=5`,
+        );
+
+        if (!res?.status) return;
+
+        const formatted = res.data.map((r) => ({
+          id: r.id,
+          postUrl: `https://yukai-social.vercel.app/post?post_id=${r.post_id}`,
+          reason: r.type,
+          reporter: `User #${r.reporter_user_id}`,
+          status: r.status,
+          actionStage: r.status,
+        }));
+
+        setReports(formatted);
+        setCurrentPage(res.current_page || page);
+        setTotalPages(res.total_pages || 1);
+      } catch (err) {
+        console.error("Failed to fetch reports: ", err);
+      } finally {
+        setIsFetchingReports(false);
+      }
+    },
+    [apiFetch],
+  );
+
+  useEffect(() => {
+    fetchReports(currentPage);
+  }, [fetchReports, currentPage]);
+
+  const applyAction = async () => {
+    try {
+      const res = await apiFetch("/api/update-post-report-status", {
+        method: "POST",
+        body: {
+          report_id: confirmAction.reportId,
+          status: confirmAction.nextStage,
+        },
+      });
+
+      if (!res?.status) return;
+
+      // optimistic UI update
+      setReports((prev) =>
+        prev.map((r) =>
+          r.id === confirmAction.reportId
+            ? {
+                ...r,
+                status: confirmAction.nextStage,
+                actionStage: confirmAction.nextStage,
+              }
+            : r,
+        ),
+      );
+
+      resetConfirm();
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
     <div className="table-main-area">
       <div className="table-container">
-         <ReportsNav />
+        <ReportsNav />
 
         <table className="user-table">
           <thead>
@@ -75,6 +105,13 @@ const ReportedTable = () => {
           </thead>
 
           <tbody>
+            {isFetchingReports && (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>
+                  Loading reports...
+                </td>
+              </tr>
+            )}
             {reports.map((report) => (
               <tr key={report.id}>
                 <td className="uid">{report.id}</td>
@@ -99,90 +136,72 @@ const ReportedTable = () => {
                 </td>
 
                 <td>
-                  <span className={`status-label ${report.status.toLowerCase()}`}>
+                  <span className={`status-label ${report.status}`}>
                     <span className="status-dot" />
-                    {report.status}
+                    {report.status.charAt(0).toUpperCase() +
+                      report.status.slice(1)}
                   </span>
                 </td>
 
                 <td>
                   <div className="action-gap">
-                    {/* Pending → Ignore / Ban */}
                     {report.actionStage === "pending" && (
                       <>
                         <button
-                          className="btn-ignore"
+                          className="btn-review"
                           onClick={() =>
                             setConfirmAction({
                               reportId: report.id,
-                              nextStage: "ignored",
-                              label: "Ignore",
+                              nextStage: "reviewed",
+                              label: "Review",
                             })
                           }
                         >
-                          Ignore
+                          Review
                         </button>
 
                         <button
-                          className="btn-ban"
+                          className="btn-danger"
                           onClick={() =>
                             setConfirmAction({
                               reportId: report.id,
-                              nextStage: "banned",
-                              label: "Ban",
+                              nextStage: "removed",
+                              label: "Remove",
                             })
                           }
                         >
-                          Ban
+                          Remove
                         </button>
                       </>
                     )}
 
-                    {/* Ignored → Ban */}
-                    {report.actionStage === "ignored" && (
+                    {report.actionStage === "reviewed" && (
                       <button
-                        className="btn-ban"
+                        className="btn-danger"
                         onClick={() =>
                           setConfirmAction({
                             reportId: report.id,
-                            nextStage: "banned",
-                            label: "Ban",
+                            nextStage: "removed",
+                            label: "Remove",
                           })
                         }
                       >
-                        Ban
+                        Remove
                       </button>
                     )}
 
-                    {/* Banned → Unban */}
-                    {report.actionStage === "banned" && (
+                    {report.actionStage === "removed" && (
                       <button
-                        className="btn-unban"
+                        className="btn-success"
                         onClick={() =>
                           setConfirmAction({
                             reportId: report.id,
-                            nextStage: "unbanned",
-                            label: "Un Ban",
+                            nextStage: "reviewed",
+                            label: "Restore",
                           })
                         }
                       >
-                        Un Ban
-                      </button>
-                    )}
-
-                    {/* Unbanned → Ban */}
-                    {report.actionStage === "unbanned" && (
-                      <button
-                        className="btn-ban"
-                        onClick={() =>
-                          setConfirmAction({
-                            reportId: report.id,
-                            nextStage: "banned",
-                            label: "Ban",
-                          })
-                        }
-                      >
-                        Ban
+                        Restore
                       </button>
                     )}
                   </div>
@@ -191,6 +210,25 @@ const ReportedTable = () => {
             ))}
           </tbody>
         </table>
+        <div className="pagination">
+          <button
+            disabled={currentPage === 1 || isFetchingReports}
+            onClick={() => setCurrentPage((prev) => prev - 1)}
+          >
+            Previous
+          </button>
+
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+
+          <button
+            disabled={currentPage === totalPages || isFetchingReports}
+            onClick={() => setCurrentPage((prev) => prev + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {/* CONFIRM MODAL */}
@@ -199,8 +237,8 @@ const ReportedTable = () => {
           <div className="modal">
             <h3>Confirm Action</h3>
             <p>
-              Are you sure you want to{" "}
-              <strong>{confirmAction.label}</strong> this post?
+              Are you sure you want to <strong>{confirmAction.label}</strong>{" "}
+              this post?
             </p>
 
             <div className="modal-actions">
@@ -209,9 +247,7 @@ const ReportedTable = () => {
               </button>
               <button
                 className={
-                  confirmAction.label === "Ban"
-                    ? "btn-danger"
-                    : "btn-success"
+                  confirmAction.label === "Ban" ? "btn-danger" : "btn-success"
                 }
                 onClick={applyAction}
               >

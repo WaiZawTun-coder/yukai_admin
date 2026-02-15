@@ -9,7 +9,7 @@ const ReportNav = () => {
   const tabs = [
     { label: "Accounts", path: "/reports/reported-accounts" },
     { label: "Posts", path: "/reports/reported-posts" },
-    { label: "Comments", path: "/reports/reported-comments" },
+    // { label: "Comments", path: "/reports/reported-comments" },
   ];
 
   return (
@@ -20,9 +20,7 @@ const ReportNav = () => {
         {tabs.map((tab) => (
           <button
             key={tab.path}
-            className={`report-tab ${
-              pathname === tab.path ? "active" : ""
-            }`}
+            className={`report-tab ${pathname === tab.path ? "active" : ""}`}
             onClick={() => router.push(tab.path)}
           >
             {tab.label}
