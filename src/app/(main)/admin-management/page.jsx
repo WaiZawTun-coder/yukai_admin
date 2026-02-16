@@ -2,7 +2,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useApi } from "../../../utilities/api";
 
-
 const AdminTable = () => {
   const [admins, setAdmins] = useState([
     {
@@ -25,7 +24,7 @@ const AdminTable = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const [adminBanError, setAdminBanError] = useState("")
+  const [adminBanError, setAdminBanError] = useState("");
 
   const [newAdmin, setNewAdmin] = useState({
     email: "",
@@ -42,10 +41,10 @@ const AdminTable = () => {
     );
   });
 
-  const confirmToggleStatus = async (action = 'ban') => {
+  const confirmToggleStatus = async (action = "ban") => {
     const res = await apiFetch(`/api/${action}-admin`, {
       method: "POST",
-      body: { banned_admin_id: confirmAdmin.id }
+      body: { banned_admin_id: confirmAdmin.id },
     });
 
     if (res.status) {
@@ -53,11 +52,11 @@ const AdminTable = () => {
         prev.map((admin) =>
           admin.id === confirmAdmin.id
             ? {
-              ...admin,
-              status: admin.status === "Active" ? "Banned" : "Active",
-            }
-            : admin
-        )
+                ...admin,
+                status: admin.status === "Active" ? "Banned" : "Active",
+              }
+            : admin,
+        ),
       );
       setConfirmAdmin(null);
     } else {
@@ -74,7 +73,7 @@ const AdminTable = () => {
     try {
       const res = await apiFetch("/api/admin/register", {
         method: "POST",
-        body: newAdmin
+        body: newAdmin,
       });
 
       if (!res || !res.status) {
@@ -92,8 +91,8 @@ const AdminTable = () => {
           username: "@" + createdAdmin.username,
           displayName: createdAdmin.display_name,
           status: createdAdmin.is_active == 1 ? "Active" : "Banned",
-          photo: "/Images/default-profiles/male.jpg"
-        }
+          photo: "/Images/default-profiles/male.jpg",
+        },
       ]);
 
       // Success
@@ -102,35 +101,37 @@ const AdminTable = () => {
 
       // Optional: reload admin list
       // await getAdmin();  (if you move getAdmin outside useEffect)
-
     } catch (error) {
       console.error(error);
-      setCreateError("Server error. Please try again.");
+      setCreateError(error.message || "Server error. Please try again.");
     } finally {
       setCreating(false);
     }
   };
-  const getAdmin = useCallback(async (page = 1) => {
-    try {
-      const res = await apiFetch(`/api/get-admin-lists?page=${page}`);
+  const getAdmin = useCallback(
+    async (page = 1) => {
+      try {
+        const res = await apiFetch(`/api/get-admin-lists?page=${page}`);
 
-      if (res?.status && res?.data) {
-        const formattedAdmins = res.data.map((admin, index) => ({
-          id: admin.admin_id || index,
-          username: "@" + admin.username,
-          displayName: admin.display_name,
-          status: admin.is_active == "1" ? "Active" : "Banned",
-          photo: admin.profile_image || "/Images/default-profiles/male.jpg"
-        }));
+        if (res?.status && res?.data) {
+          const formattedAdmins = res.data.map((admin, index) => ({
+            id: admin.admin_id || index,
+            username: "@" + admin.username,
+            displayName: admin.display_name,
+            status: admin.is_active == "1" ? "Active" : "Banned",
+            photo: admin.profile_image || "/Images/default-profiles/male.jpg",
+          }));
 
-        setAdmins(formattedAdmins);
-        setCurrentPage(res.current_page);
-        setTotalPages(res.total_pages);
+          setAdmins(formattedAdmins);
+          setCurrentPage(res.current_page);
+          setTotalPages(res.total_pages);
+        }
+      } catch (error) {
+        console.error("Failed to fetch admins:", error);
       }
-    } catch (error) {
-      console.error("Failed to fetch admins:", error);
-    }
-  }, [apiFetch])
+    },
+    [apiFetch],
+  );
 
   useEffect(() => {
     getAdmin(currentPage);
@@ -244,7 +245,8 @@ const AdminTable = () => {
                 value={newAdmin.email}
                 required
                 onChange={(e) =>
-                  setNewAdmin({ ...newAdmin, email: e.target.value }) || setCreateError("")
+                  setNewAdmin({ ...newAdmin, email: e.target.value }) ||
+                  setCreateError("")
                 }
               />
 
@@ -254,14 +256,11 @@ const AdminTable = () => {
                 value={newAdmin.displayName}
                 required
                 onChange={(e) =>
-                  setNewAdmin({ ...newAdmin, displayName: e.target.value }) || setCreateError("")
+                  setNewAdmin({ ...newAdmin, displayName: e.target.value }) ||
+                  setCreateError("")
                 }
               />
-              {createError && (
-                <div className="form-error">
-                  {createError}
-                </div>
-              )}
+              {createError && <div className="form-error">{createError}</div>}
 
               <div className="modal-actions">
                 <button
@@ -272,7 +271,11 @@ const AdminTable = () => {
                   Cancel
                 </button>
 
-                <button type="submit" className="btn-success" disabled={creating}>
+                <button
+                  type="submit"
+                  className="btn-success"
+                  disabled={creating}
+                >
                   {creating ? "Creating..." : "Create"}
                 </button>
               </div>
@@ -294,12 +297,7 @@ const AdminTable = () => {
               {confirmAdmin.displayName}?
             </p>
 
-
-            {adminBanError && (
-              <div className="form-error">
-                {adminBanError}
-              </div>
-            )}
+            {adminBanError && <div className="form-error">{adminBanError}</div>}
 
             <div className="modal-actions">
               <button
@@ -318,7 +316,11 @@ const AdminTable = () => {
                     ? "btn-danger"
                     : "btn-success"
                 }
-                onClick={() => confirmToggleStatus(confirmAdmin.status == "Active" ? "ban" : "unban")}
+                onClick={() =>
+                  confirmToggleStatus(
+                    confirmAdmin.status == "Active" ? "ban" : "unban",
+                  )
+                }
               >
                 Confirm
               </button>
