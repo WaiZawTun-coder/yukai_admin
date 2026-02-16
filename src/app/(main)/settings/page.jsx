@@ -2,189 +2,160 @@
 
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import BorderColorRoundedIcon from '@mui/icons-material/BorderColorRounded';
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
+import VisibilityOffOutlinedIcon from '@mui/icons-material/VisibilityOffOutlined';
 
 const Settings = () => {
   const { user } = useAuth();
+  const [activeSection, setActiveSection] = useState("profile");
 
-  const [adminName, setAdminName] = useState("");
-  const [oldPassword, setOldPassword] = useState("");
-  const [isVerified, setIsVerified] = useState(false);
-  const [error, setError] = useState("");
-
-  // Edit states (empty → placeholder mode)
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
-  const [profilePic, setProfilePic] = useState(null);
   const [profilePicPreview, setProfilePicPreview] = useState(null);
 
-  const handleVerify = () => {
-    setError("");
-
-    if (!user) {
-      setError("User not loaded yet.");
-      return;
-    }
-
-    if (adminName !== user.username) {
-      setError("Admin name is incorrect.");
-      return;
-    }
-
-    if (!oldPassword) {
-      setError("Please enter the old password.");
-      return;
-    }
-
-    setIsVerified(true);
-  };
+  // States for password visibility
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
-    setProfilePic(file);
     setProfilePicPreview(URL.createObjectURL(file));
   };
 
   return (
     <div className="settings-wrapper">
       <div className="settings-page">
-        <h1 className="page-title">Settings</h1>
-
         <div className="settings-grid">
-          {/* ===== Verification ===== */}
-          {!isVerified && (
-            <section className="settings-card">
-              <h2>Edit Email & Password</h2>
 
-              <div className="form-group">
-                <label>Admin Name</label>
-                <input
-                  type="text"
-                  placeholder="Admin Name"
-                  onChange={(e) => setAdminName(e.target.value)}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Enter Old Password</label>
-                <input
-                  type="password"
-                  placeholder="••••••••"
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
-              </div>
-
-              {error && <p style={{ color: "red" }}>{error}</p>}
-
-              <button className="save-btn" onClick={handleVerify}>
-                Continue
-              </button>
-            </section>
-          )}
-
-          {/* ===== Edit Email & Password ===== */}
-          {isVerified && (
-            <section className="settings-card">
-              <h2>Edit Email & Password</h2>
-
-              <div className="form-group">
-                <label>New Email</label>
-                <input
-                  type="email"
-                  placeholder={user?.email || "New Email"}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>New Password</label>
-                <input type="password" placeholder="New Password" />
-              </div>
-
-              <div className="form-group">
-                <label>Confirm Password</label>
-                <input type="password" placeholder="Confirm Password" />
-              </div>
-
-              <button className="save-btn">Save Changes</button>
-            </section>
-          )}
-
-          {/* ===== Modern Edit Profile ===== */}
-          <section className="settings-card ">
-            <h2>Edit Profile</h2>
-
-            <div className="profile-photo-wrapper modern-profile">
-              <img
-                src={profilePicPreview || user?.profilePic}
-                alt="Profile"
-                className="profile-photo"
-              />
-
-              <label className="edit-photo-btn">
-                <BorderColorRoundedIcon fontSize="small"/>
-                <input
-                  type="file"
-                  accept="image/*"
-                  hidden
-                  onChange={handleProfilePicChange}
-                />
-              </label>
+          {/* ===== LEFT MENU ===== */}
+          <section className="settings-menu">
+            <h1>Settings</h1>
+            <div className="menu-section">
+              <h3>Account Setting</h3>
+              <hr />
+              <ul>
+                <li
+                  className={activeSection === "profile" ? "active" : ""}
+                  onClick={() => setActiveSection("profile")}
+                >
+                  Edit Profile
+                </li>
+                <li
+                  className={activeSection === "security" ? "active" : ""}
+                  onClick={() => setActiveSection("security")}
+                >
+                  Security & Email
+                </li>
+              </ul>
             </div>
-
-            <p className="profile-label ">PROFILE PHOTO</p>
-
-            <div className="form-group">
-              <label>Display Name</label>
-              <input
-                type="text"
-                placeholder={
-                  user?.display_name || "Admin"
-                }
-                onChange={(e) => setDisplayName(e.target.value)}
-              />
-            </div>
-
-            <div className="form-group">
-              <label>Username</label>
-              <input
-                type="text"
-                placeholder={user?.username || "Username"}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
-
-            <button className="save-btn">Save Profile</button>
           </section>
 
-          {/* ===== Privacy ===== */}
-          <section className="settings-card">
-            <h2>Privacy Settings</h2>
+          {/* ===== RIGHT PANEL ===== */}
+          <div className="settings-content">
+            {activeSection === "profile" && (
+              <section className="settings-card">
+                <h2>Edit Profile</h2>
+                <div className="profile-photo-container">
+                  <div className="profile-photo-wrapper">
+                    <img
+                      className="profile-photo"
+                      src={profilePicPreview || user?.profile_image || `/images/default-profiles/${user?.gender || "male"}.jpg`}
+                      alt="Profile"
+                    />
+                    <label className="profile-photo-overlay">
+                      <CameraAltOutlinedIcon className="camera-icon" />
+                      <input type="file" hidden accept="image/*" onChange={handleProfilePicChange} />
+                    </label>
+                  </div>
+                  <p className="profile-label">PROFILE PHOTO</p>
+                </div>
 
-            <div className="toggle-row">
-              <div>
-                <h4>Enforce Two-Factor Authentication</h4>
-                <p>Require 2FA for every login.</p>
-              </div>
+                <div className="form-group">
+                  <label>Display Name</label>
+                  <input value={user?.display_name || "Admin"} onChange={(e) => setDisplayName(e.target.value)} />
+                </div>
 
-              <label className="switch">
-                <input type="checkbox" />
-                <span className="slider"></span>
-              </label>
-            </div>
+                <div className="form-group">
+                  <label>Username</label>
+                  <input value={user?.username || "admin"} onChange={(e) => setUsername(e.target.value)} />
+                </div>
+                <button className="save-btn">Save Profile</button>
+              </section>
+            )}
 
-            <div className="form-group">
-              <label>Data Access Control</label>
-              <select>
-                <option>Full Access</option>
-                <option>Limited Access</option>
-                <option>Read Only</option>
-              </select>
-            </div>
+            {activeSection === "security" && (
+              <section className="settings-card">
+                <h2>Account Security</h2>
+                <p className="section-subtitle">Enter your current password to update your account details.</p>
 
-            <button className="save-btn">Save</button>
-          </section>
+            
+                <div className="form-group ">
+                  <label>Current Password</label>
+                  <div className="password-input-wrapper">
+                    <input 
+                      type={showCurrentPassword ? "text" : "password"} 
+                      placeholder="Enter current password" 
+                    />
+                    <button 
+                      type="button" 
+                      className="eye-btn" 
+                      onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                    >
+                      {showCurrentPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="section-divider"></div>
+
+                <div className="form-group">
+                  <label>New Email Address</label>
+                  <input type="email" defaultValue={user?.email || "email@example.com"} />
+                </div>
+
+                {/* New Password with Eye Toggle */}
+                <div className="form-group">
+                  <label>New Password</label>
+                  <div className="password-input-wrapper">
+                    <input 
+                      type={showNewPassword ? "text" : "password"} 
+                      placeholder="Enter new password" 
+                    />
+                    <button 
+                      type="button" 
+                      className="eye-btn" 
+                      onClick={() => setShowNewPassword(!showNewPassword)}
+                    >
+                      {showNewPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password with Eye Toggle */}
+                <div className="form-group">
+                  <label>Confirm New Password</label>
+                  <div className="password-input-wrapper">
+                    <input 
+                      type={showConfirmPassword ? "text" : "password"} 
+                      placeholder="Confirm new password" 
+                    />
+                    <button 
+                      type="button" 
+                      className="eye-btn" 
+                      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    >
+                      {showConfirmPassword ? <VisibilityOffOutlinedIcon /> : <VisibilityOutlinedIcon />}
+                    </button>
+                  </div>
+                </div>
+
+                <button className="save-btn">Update Account</button>
+              </section>
+            )}
+          </div>
         </div>
       </div>
     </div>
