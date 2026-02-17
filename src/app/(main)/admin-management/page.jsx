@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { useApi } from "../../../utilities/api";
 import { useAuth } from "../../../context/AuthContext";
+import AccessDenied from "../../AccessDenied";
 
 const AdminTable = () => {
   const [admins, setAdmins] = useState([]);

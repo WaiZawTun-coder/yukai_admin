@@ -25,6 +25,7 @@ const adminMenuList = [
     icon: DashboardOutlinedIcon,
     activeIcon: DashboardRoundedIcon,
     link: "/",
+    access: ["super_admin", "moderator"],
   },
   {
     id: 2,
@@ -32,6 +33,7 @@ const adminMenuList = [
     icon: SupervisedUserCircleOutlinedIcon,
     activeIcon: SupervisedUserCircleRoundedIcon,
     link: "/admin-management",
+    access: ["super_admin"],
   },
   {
     id: 3,
@@ -39,6 +41,7 @@ const adminMenuList = [
     icon: GroupOutlinedIcon,
     activeIcon: GroupRoundedIcon,
     link: "/user-management",
+    access: ["super_admin", "moderator"],
   },
   {
     id: 4,
@@ -46,6 +49,7 @@ const adminMenuList = [
     icon: ReportOutlinedIcon,
     activeIcon: ReportRoundedIcon,
     link: "/reports/reported-accounts",
+    access: ["super_admin", "moderator"],
   },
   {
     id: 5,
@@ -53,6 +57,7 @@ const adminMenuList = [
     icon: SettingsOutlinedIcon,
     activeIcon: SettingsRoundedIcon,
     link: "/settings",
+    access: ["super_admin", "moderator"],
   },
 ];
 
@@ -81,8 +86,8 @@ const AdminSidebar = () => {
             height={52}
           />
           <div className="info">
-            <h4>{user?.display_name || "Admin"}</h4>
-            <p>@{user?.username || "admin"}</p>
+            <h4>{user?.display_name || "super_admin"}</h4>
+            <p>@{user?.username || "super_admin"}</p>
           </div>
         </div>
         {/* </Link> */}
@@ -91,6 +96,9 @@ const AdminSidebar = () => {
 
         <ul className="menu">
           {adminMenuList.map((item) => {
+            console.log(user.role);
+            if (!item.access.includes(user?.role)) return null;
+
             const isActive =
               item.link === "/reports/reported-accounts"
                 ? pathname.startsWith("/reports")

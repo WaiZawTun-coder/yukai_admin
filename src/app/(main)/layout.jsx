@@ -1,20 +1,27 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import AdminSidebar from "../../Components/Sidebar";
 import { useAuth } from "../../context/AuthContext";
+import AccessDenied from "../AccessDenied";
 
 export default function Layout({ children }) {
-  const { loading, isLoggedIn } = useAuth();
+  const { loading, isLoggedIn, user: authUser } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
-  console.log({ loading, isLoggedIn })
-
-  if (loading) return <div>Loading...</div>
+  if (loading) return <div>Loading...</div>;
 
   if (!loading && !isLoggedIn) {
     router.push("/login");
     return null;
+  }
+
+  if (
+    authUser.role !== "super_admin" &&
+    pathname.startsWith("/admin-management")
+  ) {
+    return <AccessDenied />;
   }
 
   return (

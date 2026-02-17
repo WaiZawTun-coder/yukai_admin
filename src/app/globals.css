@@ -11,6 +11,7 @@
 @import url("./css/dashboard.css");
 @import url("./css/password-setup.css");
 @import url("./css/auth-layout.css");
+@import url("./css/access-denied.css");
 
 :root,
 html[data-theme="light"] {
