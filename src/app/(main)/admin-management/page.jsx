@@ -1,18 +1,12 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { useApi } from "../../../utilities/api";
+import { useAuth } from "../../../context/AuthContext";
 
 const AdminTable = () => {
-  const [admins, setAdmins] = useState([
-    {
-      id: "1024",
-      username: "@kaung",
-      displayName: "Kaung Thant",
-      status: "Active",
-      photo: "./Images/S&RcatPfp.jpg",
-    },
-  ]);
+  const [admins, setAdmins] = useState([]);
 
+  const { user: authUser } = useAuth();
   const apiFetch = useApi();
 
   const [confirmAdmin, setConfirmAdmin] = useState(null);
@@ -71,7 +65,7 @@ const AdminTable = () => {
     setCreating(true);
 
     try {
-      const res = await apiFetch("/api/admin/register", {
+      const res = await apiFetch("/auth/admin/register", {
         method: "POST",
         body: newAdmin,
       });
@@ -152,12 +146,14 @@ const AdminTable = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
 
-            <button
-              className="btn-create-admin"
-              onClick={() => setShowCreateModal(true)}
-            >
-              Create Admin
-            </button>
+            {authUser.role == "super_admin" && (
+              <button
+                className="btn-create-admin"
+                onClick={() => setShowCreateModal(true)}
+              >
+                Create Admin
+              </button>
+            )}
           </div>
         </div>
 

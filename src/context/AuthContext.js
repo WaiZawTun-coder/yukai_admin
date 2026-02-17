@@ -12,24 +12,31 @@ export const AuthProvider = ({ children }) => {
   const router = useRouter();
   const [accessToken, setAccessToken] = useState();
 
-
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const refreshRes = await fetch(getBackendUrl() + "/auth/admin/refresh", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
+        const refreshRes = await fetch(
+          getBackendUrl() + "/auth/admin/refresh",
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
         const refreshData = await refreshRes.json();
 
         if (refreshRes.ok && refreshData.status) {
-          const profileRes = await fetch(getBackendUrl() + "/api/admin/profile", {
-            headers: { Authorization: `Bearer ${refreshData.data.access_token}` },
-            credentials: "include",
-          });
+          const profileRes = await fetch(
+            getBackendUrl() + "/api/admin/profile",
+            {
+              headers: {
+                Authorization: `Bearer ${refreshData.data.access_token}`,
+              },
+              credentials: "include",
+            },
+          );
           const profileData = await profileRes.json();
           setAccessToken(refreshData.data.access_token);
 
@@ -47,10 +54,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async ({ username, password }) => {
-    setLoading(true);
+    // setLoading(true);
     setError(null);
     try {
-      const res = await fetch(getBackendUrl() + "/api/adminLogin", {
+      const res = await fetch(getBackendUrl() + "/auth/admin-login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -60,19 +67,21 @@ export const AuthProvider = ({ children }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || "Login failed");
 
-      console.log({ data })
-
       if (!data.status) throw new Error(data.message || "Login failed");
+
+      if (data.action == "SET_PASSWORD") {
+        router.push(`/setup-password?email=${encodeURIComponent(username)}`);
+      }
+
+      console.log("Login response data:", data.data);
 
       setUser(data.data.user || data.data);
 
-      setAccessToken(data.data.accessToken);
+      setAccessToken(data.data.access_token);
       router.push("/");
     } catch (err) {
       setError(err.message);
       throw new Error(err.message);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -82,8 +91,8 @@ export const AuthProvider = ({ children }) => {
         method: "POST",
         credentials: "include",
         headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
+          Authorization: `Bearer ${accessToken}`,
+        },
       });
 
       if (res.status) {
@@ -96,15 +105,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{
-      user,
-      loading,
-      error,
-      login,
-      logout,
-      accessToken,
-      isLoggedIn: user != null
-    }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        loading,
+        error,
+        login,
+        logout,
+        accessToken,
+        isLoggedIn: user != null,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

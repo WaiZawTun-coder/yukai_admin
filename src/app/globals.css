@@ -9,8 +9,8 @@
 @import url("./css/login.css");
 @import url("./css/settings.css");
 @import url("./css/dashboard.css");
-
-
+@import url("./css/password-setup.css");
+@import url("./css/auth-layout.css");
 
 :root,
 html[data-theme="light"] {
@@ -88,17 +88,20 @@ html[data-theme="light"] {
   --focus-ring: rgba(110, 193, 228, 0.6);
 
   /* GRADIENTS */
-  --gradient-sidebar: linear-gradient(180deg,
-      var(--background-color) 0%,
-      var(--secondary-color) 100%);
-  --gradient-card: linear-gradient(180deg,
-      rgba(11, 42, 63, 0.98),
-      rgba(11, 42, 63, 0.9));
+  --gradient-sidebar: linear-gradient(
+    180deg,
+    var(--background-color) 0%,
+    var(--secondary-color) 100%
+  );
+  --gradient-card: linear-gradient(
+    180deg,
+    rgba(11, 42, 63, 0.98),
+    rgba(11, 42, 63, 0.9)
+  );
 }
 
 /* DARK MODE */
 @media (prefers-color-scheme: dark) {
-
   :root,
   html[data-theme="dark"] {
     /* Brand */
@@ -182,8 +185,9 @@ a {
   justify-content: center;
   align-items: center;
   gap: 16px;
-  margin-top: 25px;
   padding: 12px 0;
+  max-width: 400px;
+  margin: 0 auto;
 }
 
 /* Page Info Text */
@@ -191,6 +195,8 @@ a {
   font-size: 14px;
   font-weight: 500;
   color: #555;
+  min-width: 100px;
+  text-align: center;
 }
 
 /* Buttons */

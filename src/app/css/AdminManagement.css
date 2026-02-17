@@ -6,6 +6,11 @@
   margin-bottom: 20px;
 }
 
+.admin-header-actions {
+  display: flex;
+  gap: 12px;
+}
+
 /* Create Admin Button */
 .btn-create-admin {
   background-color: #4e84f9;
@@ -16,6 +21,7 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: 550;
+  max-width: 150px;
 }
 
 .btn-create-admin:hover {

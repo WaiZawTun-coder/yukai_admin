@@ -6,7 +6,7 @@
 /* PAGE */
 .login-page {
   width: 100%;
-  min-height: 80vh;
+  min-height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -78,7 +78,6 @@
     0 0 0 2px rgba(37, 99, 235, 0.25),
     0 0 0 5px rgba(37, 99, 235, 0.12);
 }
-
 
 /* PASSWORD ICON */
 .password-wrapper {
@@ -164,4 +163,23 @@
   border-radius: 6px;
   margin: 10px 0;
   font-size: 14px;
+}
+
+.forgot-password {
+  text-align: right;
+  margin-top: 8px;
+  margin-bottom: 10px;
+}
+
+.forgot-password a {
+  font-size: 13px;
+  color: #4e73df;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+.forgot-password a:hover {
+  text-decoration: underline;
+  color: #2e59d9;
 }

@@ -68,23 +68,24 @@ const AdminSidebar = () => {
           <small>yukai</small>愉快
         </div>
 
-        <Link href="/admin/profile" style={{ textDecoration: "none" }}>
-          <div className="profile">
-            <Image
-              src={
-                user?.profile_image ||
-                `/Images/default-profiles/${user?.gender || "male"}.jpg`
-              }
-              alt="profile"
-              width={52}
-              height={52}
-            />
-            <div className="info">
-              <h4>{user?.display_name || "Admin"}</h4>
-              <p>@{user?.username || "admin"}</p>
-            </div>
+        {/* <Link href="/admin/profile" style={{ textDecoration: "none" }}> */}
+        <div className="profile">
+          <Image
+            src={
+              user?.profile_image
+                ? `/api/images?url=${user.profile_image}`
+                : `/Images/default-profiles/${user?.gender || "male"}.jpg`
+            }
+            alt="profile"
+            width={52}
+            height={52}
+          />
+          <div className="info">
+            <h4>{user?.display_name || "Admin"}</h4>
+            <p>@{user?.username || "admin"}</p>
           </div>
-        </Link>
+        </div>
+        {/* </Link> */}
 
         <hr className="profile-horizontal-bar" />
 

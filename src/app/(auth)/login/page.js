@@ -1,8 +1,9 @@
 "use client";
+import LockOpenRoundedIcon from "@mui/icons-material/LockOpenRounded";
+import LockOutlineRoundedIcon from "@mui/icons-material/LockOutlineRounded";
 import { useState } from "react";
-import LockOpenRoundedIcon from '@mui/icons-material/LockOpenRounded';
-import LockOutlineRoundedIcon from '@mui/icons-material/LockOutlineRounded';
 import { useAuth } from "../../../context/AuthContext";
+import Link from "next/link";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +13,8 @@ const Login = () => {
 
   const [error, setError] = useState("");
 
+  const [errors, setErrors] = useState({});
+
   const { login } = useAuth();
 
   const handleLogin = async (e) => {
@@ -20,16 +23,18 @@ const Login = () => {
     setError("");
 
     if (!username || !password) {
-      setError("Username and password are required.");
+      setErrors({
+        username: !username ? "Username is required." : "",
+        password: !password ? "Password is required." : "",
+      });
       return;
     }
 
     try {
       setLoggingIn(true);
 
-      const res = await login({ username, password });
+      await login({ username, password });
       // make sure login() throws error on failure
-
     } catch (err) {
       setError(err.message || "Login failed. Please try again.");
     } finally {
@@ -45,7 +50,19 @@ const Login = () => {
 
         <form className="login-form" onSubmit={handleLogin}>
           <label>ADMIN NAME</label>
-          <input type="text" placeholder="Admin username or email" value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input
+            type="text"
+            placeholder="Admin username or email"
+            value={username}
+            onChange={(e) => {
+              setUsername(e.target.value);
+              setError("");
+              setErrors((prev) => ({ ...prev, username: "" }));
+            }}
+          />
+          {errors.username && (
+            <div className="field-error">{errors.username}</div>
+          )}
 
           <label>PASSWORD</label>
 
@@ -55,23 +72,39 @@ const Login = () => {
               type={showPassword ? "text" : "password"}
               placeholder="Password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError("");
+                setErrors((prev) => ({ ...prev, password: "" }));
+              }}
             />
             <span
               className="password-eye"
               onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <LockOutlineRoundedIcon /> : <LockOpenRoundedIcon />}
+              {showPassword ? (
+                <LockOutlineRoundedIcon />
+              ) : (
+                <LockOpenRoundedIcon />
+              )}
             </span>
           </div>
+          {errors.password && (
+            <div className="field-error">{errors.password}</div>
+          )}
+
+          <div className="forgot-password">
+            <Link href="/forget-password">Forgot Password?</Link>
+          </div>
           {error && <div className="error-message">{error}</div>}
-          <button type="submit" disabled={loggingIn}>{loggingIn ? "Logging In..." : "Login"}</button>
+          <button type="submit" disabled={loggingIn}>
+            {loggingIn ? "Logging In..." : "Login"}
+          </button>
         </form>
 
         <footer className="login_footer">
           <img src="./Images/logo.png" alt="Yukai Logo" />
         </footer>
-
       </div>
     </div>
   );
