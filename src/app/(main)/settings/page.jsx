@@ -156,7 +156,7 @@ const Settings = () => {
                       <Image
                         className="profile-photo"
                         src={
-                          profilePicPreview
+                          user?.profile_image
                             ? `/api/images?url=${user?.profile_image}`
                             : `/Images/default-profiles/${user?.gender || "male"}.jpg`
                         }
