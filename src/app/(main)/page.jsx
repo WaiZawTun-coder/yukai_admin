@@ -69,7 +69,7 @@ export default function DashboardPage() {
         <PieChartBox
           title="Reaction Distribution"
           labels={data.reactionDistribution.map((i) => i.reaction)}
-          values={data.reactionDistribution.map((i) => Number(i.percentage))}
+          values={data.reactionDistribution.map((i) => Number(i.count))}
         />
       </div>
     </div>
@@ -115,6 +115,19 @@ function PieChartBox({ title, labels = [], values = [] }) {
     labels,
     theme: { mode: "dark" },
     legend: { position: "bottom" },
+    tooltip: {
+      y: {
+        formatter: function (val) {
+          return val; // show actual value
+        },
+      },
+    },
+    dataLabels: {
+      formatter: function (val, opts) {
+        return opts.w.config.series[opts.seriesIndex];
+        // shows actual value inside slice instead of %
+      },
+    },
   };
 
   return (
