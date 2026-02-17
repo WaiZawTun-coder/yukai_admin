@@ -1,8 +1,7 @@
 "use client";
-import React, { useCallback, useEffect, useState } from "react";
-import { useApi } from "../../../utilities/api";
+import { useCallback, useEffect, useState } from "react";
 import { useAuth } from "../../../context/AuthContext";
-import AccessDenied from "../../AccessDenied";
+import { useApi } from "../../../utilities/api";
 
 const AdminTable = () => {
   const [admins, setAdmins] = useState([]);

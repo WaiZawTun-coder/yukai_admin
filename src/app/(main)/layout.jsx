@@ -10,7 +10,13 @@ export default function Layout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="auth-loader">
+        <div className="spinner"></div>
+        <p>Checking authentication...</p>
+      </div>
+    );
 
   if (!loading && !isLoggedIn) {
     router.push("/login");
