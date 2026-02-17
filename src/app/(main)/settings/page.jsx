@@ -68,36 +68,41 @@ const Settings = () => {
   };
 
   const handleSavePassword = async () => {
-    if (newPassword !== confirmNewPassword) {
-      alert("New password and confirm password do not match.");
-      return;
-    }
+    try {
+      if (newPassword !== confirmNewPassword) {
+        alert("New password and confirm password do not match.");
+        return;
+      }
 
-    const res = await apiFetch("/api/check-admin-password", {
-      method: "POST",
-      body: { password: currentPassword },
-    });
+      const res = await apiFetch("/api/check-admin-password", {
+        method: "POST",
+        body: { password: currentPassword },
+      });
 
-    if (!res.status) {
-      alert("Incorrect current password.");
-      return;
-    }
+      if (!res.status) {
+        alert("Incorrect current password.");
+        return;
+      }
 
-    const updatePasswordRes = await apiFetch("/api/change-admin-password", {
-      method: "POST",
-      body: { new_password: newPassword },
-    });
+      const updatePasswordRes = await apiFetch("/api/change-admin-password", {
+        method: "POST",
+        body: { new_password: newPassword },
+      });
 
-    if (updatePasswordRes.status) {
-      alert("Password updated successfully.");
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmNewPassword("");
-    } else {
-      alert(
-        updatePasswordRes.message ||
-          "Failed to update password. Please try again.",
-      );
+      if (updatePasswordRes.status) {
+        alert("Password updated successfully.");
+        setCurrentPassword("");
+        setNewPassword("");
+        setConfirmNewPassword("");
+      } else {
+        alert(
+          updatePasswordRes.message ||
+            "Failed to update password. Please try again.",
+        );
+      }
+    } catch (error) {
+      console.error("Error updating password:", error.message);
+      alert(error.message || "An error occurred. Please try again.");
     }
   };
 
@@ -134,7 +139,7 @@ const Settings = () => {
                   className={activeSection === "security" ? "active" : ""}
                   onClick={() => setActiveSection("security")}
                 >
-                  Security & Email
+                  Security
                 </li>
               </ul>
             </div>
