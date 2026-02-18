@@ -78,3 +78,13 @@
   color: var(--status-error);
   background-color: var(--surface-3);
 }
+
+.status-filter,
+.filter-select {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: var(--secondary-color);
+  font-size: 14px;
+  margin: 0 10px;
+}

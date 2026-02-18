@@ -494,4 +494,5 @@ select.action-select option[value="warn"] {
 select.action-select option[value="ban"],
 select.action-select option[value="suspend"] {
   color: #dc2626;
+  background: white;
 }

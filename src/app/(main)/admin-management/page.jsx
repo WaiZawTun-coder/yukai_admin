@@ -20,6 +20,8 @@ const AdminTable = () => {
 
   const [adminBanError, setAdminBanError] = useState("");
 
+  const [statusFilter, setStatusFilter] = useState("All");
+
   const [newAdmin, setNewAdmin] = useState({
     email: "",
     displayName: "",
@@ -28,11 +30,15 @@ const AdminTable = () => {
   const filteredAdmins = admins.filter((admin) => {
     const term = searchTerm.toLowerCase();
 
-    return (
+    const matchesSearch =
       admin.username.toLowerCase().includes(term) ||
       admin.displayName.toLowerCase().includes(term) ||
-      String(admin.id).toLowerCase().includes(term)
-    );
+      String(admin.id).toLowerCase().includes(term);
+
+    const matchesStatus =
+      statusFilter === "All" || admin.status === statusFilter;
+
+    return matchesSearch && matchesStatus;
   });
 
   const confirmToggleStatus = async (action = "ban") => {
@@ -138,6 +144,16 @@ const AdminTable = () => {
           <h2>Admin Management Overview</h2>
 
           <div className="admin-header-actions">
+            <select
+              className="status-filter"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="All">All Status</option>
+              <option value="Active">Active</option>
+              <option value="Banned">Banned</option>
+            </select>
+
             <input
               type="text"
               placeholder="Search by ID, username, or name..."

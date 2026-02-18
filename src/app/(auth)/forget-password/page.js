@@ -54,30 +54,32 @@ export default function ForgotPassword() {
 
   return (
     <div className="forgot-container">
-      <form className="forgot-card" onSubmit={handleSubmit}>
-        <h2>Forgot Password</h2>
-        <p className="subtitle">
-          Enter your email to receive a password reset link.
-        </p>
+      <div>
+        <form className="forgot-card" onSubmit={handleSubmit}>
+          <h2>Forgot Password</h2>
+          <p className="subtitle">
+            Enter your email to receive a password reset link.
+          </p>
 
-        <div className="input-group">
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <div className="input-group">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+
+          {error && <p className="error">{error}</p>}
+          {success && <p className="success">{success}</p>}
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Sending..." : "Send Reset Link"}
+          </button>
+        </form>
+        <div className="forgot-password">
+          <Link href="/login">Back to login</Link>
         </div>
-
-        {error && <p className="error">{error}</p>}
-        {success && <p className="success">{success}</p>}
-
-        <button type="submit" disabled={loading}>
-          {loading ? "Sending..." : "Send Reset Link"}
-        </button>
-      </form>
-      <div className="forgot-password">
-        <Link href="/login">Forgot Password?</Link>
       </div>
     </div>
   );

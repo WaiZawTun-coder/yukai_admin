@@ -11,6 +11,8 @@ export default function Page() {
   const [searchTerm, setSearchTerm] = useState("");
   const [confirmUser, setConfirmUser] = useState(null);
 
+  const [statusFilter, setStatusFilter] = useState("");
+
   const apiFetch = useApi();
 
   // Fetch users for a specific page
@@ -106,6 +108,21 @@ export default function Page() {
     }
   };
 
+  const filteredUsers = users.filter((user) => {
+    if (!statusFilter) return true;
+
+    if (statusFilter === "active")
+      return user.isActive && !user.isSuspended && !user.isWarned;
+
+    if (statusFilter === "banned") return !user.isActive;
+
+    if (statusFilter === "suspended") return user.isSuspended;
+
+    if (statusFilter === "warned") return user.isWarned;
+
+    return true;
+  });
+
   return (
     <div className="table-main-area">
       <div className="table-container">
@@ -113,13 +130,29 @@ export default function Page() {
         <div className="table-header">
           <h2>User Management Overview</h2>
 
-          <input
-            type="text"
-            className="search-input"
-            placeholder="Search by ID, Username, Name..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          <div>
+            <input
+              type="text"
+              className="search-input"
+              placeholder="Search by ID, Username, Name..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select
+              className="filter-select"
+              value={statusFilter}
+              onChange={(e) => {
+                setStatusFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+            >
+              <option value="">All Status</option>
+              <option value="active">Active</option>
+              <option value="banned">Banned</option>
+              <option value="suspended">Suspended</option>
+              <option value="warned">Warned</option>
+            </select>
+          </div>
         </div>
 
         {/* TABLE */}
@@ -142,8 +175,8 @@ export default function Page() {
                   Loading...
                 </td>
               </tr>
-            ) : users.length > 0 ? (
-              users.map((user) => (
+            ) : filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.username}</td>
