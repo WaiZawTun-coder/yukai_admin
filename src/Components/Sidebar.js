@@ -128,10 +128,6 @@ const AdminSidebar = () => {
             <span>Logout</span>
           </li>
         </ul>
-
-        <div className="toggle">
-          <DarkModeRoundedIcon style={{ fontSize: "20px", color: "#fff" }} />
-        </div>
       </div>
 
       {showLogoutModal && (
