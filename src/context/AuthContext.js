@@ -73,8 +73,6 @@ export const AuthProvider = ({ children }) => {
         router.push(`/setup-password?email=${encodeURIComponent(username)}`);
       }
 
-      console.log("Login response data:", data.data);
-
       setUser(data.data.user || data.data);
 
       setAccessToken(data.data.access_token);

@@ -3,7 +3,6 @@ import { getBackendUrl } from "./url";
 
 export const useApi = () => {
   const { accessToken, refreshToken, logout } = useAuth();
-  console.log("Access Token in useApi:", accessToken);
 
   const apiFetch = async (
     url,

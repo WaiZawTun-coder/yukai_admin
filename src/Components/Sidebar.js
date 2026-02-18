@@ -96,7 +96,6 @@ const AdminSidebar = () => {
 
         <ul className="menu">
           {adminMenuList.map((item) => {
-            console.log(user.role);
             if (!item.access.includes(user?.role)) return null;
 
             const isActive =

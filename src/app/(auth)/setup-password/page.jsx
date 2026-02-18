@@ -70,7 +70,6 @@ export default function PasswordSetup() {
 
     if (Object.keys(validationErrors).length === 0) {
       alert("Password successfully updated!");
-      console.log("Form Data:", form);
       // Call backend API here
 
       const res = await apiFetch("/auth/admin/setup-password", {

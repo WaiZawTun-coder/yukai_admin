@@ -73,7 +73,6 @@ const ReportedTable = () => {
           status: r.is_active == 0 ? "Banned" : r.status,
         }));
 
-        console.log("Fetched reports: ", { enrichedReports });
         setReports(enrichedReports);
       } catch (err) {
         console.error(err);
