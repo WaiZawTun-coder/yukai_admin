@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useApi } from "../../../utilities/api";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function ForgotPassword() {
   const apiFetch = useApi();
@@ -75,6 +76,9 @@ export default function ForgotPassword() {
           {loading ? "Sending..." : "Send Reset Link"}
         </button>
       </form>
+      <div className="forgot-password">
+        <Link href="/login">Forgot Password?</Link>
+      </div>
     </div>
   );
 }
