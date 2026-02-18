@@ -35,9 +35,31 @@ const Settings = () => {
     const file = e.target.files[0];
     if (!file) return;
 
+    if (!file.type.startsWith("image/")) {
+      alert("Please select a valid image file.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be smaller than 5MB.");
+      return;
+    }
+
+    if (profilePicPreview) {
+      URL.revokeObjectURL(profilePicPreview);
+    }
+
     setProfilePicFile(file);
     setProfilePicPreview(URL.createObjectURL(file));
   };
+
+  useEffect(() => {
+    return () => {
+      if (profilePicPreview) {
+        URL.revokeObjectURL(profilePicPreview);
+      }
+    };
+  }, [profilePicPreview]);
 
   const handleSaveProfile = async () => {
     setSaving(true);
@@ -161,9 +183,11 @@ const Settings = () => {
                       <Image
                         className="profile-photo"
                         src={
-                          user?.profile_image
-                            ? `/api/images?url=${user?.profile_image}`
-                            : `/Images/default-profiles/${user?.gender || "male"}.jpg`
+                          profilePicPreview
+                            ? profilePicPreview
+                            : user?.profile_image
+                              ? `/api/images?url=${user?.profile_image}`
+                              : `/Images/default-profiles/${user?.gender || "male"}.jpg`
                         }
                         alt="Profile"
                         width={142}
