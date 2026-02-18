@@ -157,12 +157,14 @@ const Settings = () => {
                 >
                   Edit Profile
                 </li>
-                <li
-                  className={activeSection === "security" ? "active" : ""}
-                  onClick={() => setActiveSection("security")}
-                >
-                  Security
-                </li>
+                {user.role !== "super_admin" && (
+                  <li
+                    className={activeSection === "security" ? "active" : ""}
+                    onClick={() => setActiveSection("security")}
+                  >
+                    Security
+                  </li>
+                )}
               </ul>
             </div>
           </section>
