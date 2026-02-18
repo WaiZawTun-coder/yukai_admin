@@ -22,6 +22,8 @@ const AdminTable = () => {
 
   const [statusFilter, setStatusFilter] = useState("All");
 
+  const [isLoading, setIsLoading] = useState(true);
+
   const [newAdmin, setNewAdmin] = useState({
     email: "",
     displayName: "",
@@ -111,6 +113,7 @@ const AdminTable = () => {
   const getAdmin = useCallback(
     async (page = 1) => {
       try {
+        setIsLoading(true);
         const res = await apiFetch(`/api/get-admin-lists?page=${page}`);
 
         if (res?.status && res?.data) {
@@ -128,6 +131,8 @@ const AdminTable = () => {
         }
       } catch (error) {
         console.error("Failed to fetch admins:", error);
+      } finally {
+        setIsLoading(false);
       }
     },
     [apiFetch],
@@ -186,34 +191,42 @@ const AdminTable = () => {
           </thead>
 
           <tbody>
-            {filteredAdmins.map((admin) => (
-              <tr key={admin.id}>
-                <td className="uid">{admin.id}</td>
-                <td className="username">{admin.username}</td>
-                <td className="display-name">{admin.displayName}</td>
-                <td>
-                  <img src={admin.photo} className="profile-img" />
-                </td>
-                <td>
-                  <span
-                    className={`status-label ${admin.status.toLowerCase()}`}
-                  >
-                    <span className="status-dot"></span>
-                    {admin.status}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className={
-                      admin.status === "Active" ? "btn-ban" : "btn-unban"
-                    }
-                    onClick={() => setConfirmAdmin(admin)}
-                  >
-                    {admin.status === "Active" ? "Ban" : "Unban"}
-                  </button>
+            {isLoading ? (
+              <tr>
+                <td colSpan="6" style={{ textAlign: "center" }}>
+                  Loading admins...
                 </td>
               </tr>
-            ))}
+            ) : (
+              filteredAdmins.map((admin) => (
+                <tr key={admin.id}>
+                  <td className="uid">{admin.id}</td>
+                  <td className="username">{admin.username}</td>
+                  <td className="display-name">{admin.displayName}</td>
+                  <td>
+                    <img src={admin.photo} className="profile-img" />
+                  </td>
+                  <td>
+                    <span
+                      className={`status-label ${admin.status.toLowerCase()}`}
+                    >
+                      <span className="status-dot"></span>
+                      {admin.status}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className={
+                        admin.status === "Active" ? "btn-ban" : "btn-unban"
+                      }
+                      onClick={() => setConfirmAdmin(admin)}
+                    >
+                      {admin.status === "Active" ? "Ban" : "Unban"}
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
             {filteredAdmins.length === 0 && (
               <tr>
                 <td colSpan="6" style={{ textAlign: "center" }}>

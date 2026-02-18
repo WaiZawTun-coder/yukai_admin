@@ -128,7 +128,15 @@ const ReportedTable = () => {
                 </td>
 
                 <td>
-                  <div className="display-name">{report.reason}</div>
+                  <div className="display-name">
+                    {report.reason == "improper_word"
+                      ? "Improper Words"
+                      : report.reason == "harassment"
+                        ? "Harassment"
+                        : report.reason == "spam"
+                          ? "Spam"
+                          : "Other"}
+                  </div>
                 </td>
 
                 <td>

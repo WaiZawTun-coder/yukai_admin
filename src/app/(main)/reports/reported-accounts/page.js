@@ -8,12 +8,12 @@ const statusActions = {
     { label: "Ignore", nextStage: "reviewed", endpoint: null },
     { label: "Ban", nextStage: "banned", endpoint: "/api/ban-user" },
     { label: "Warn", nextStage: "warned", endpoint: "/api/warn-user" },
-    { label: "Suspend", nextStage: "suspended", endpoint: "/api/suspend-user" },
+    // { label: "Suspend", nextStage: "suspended", endpoint: "/api/suspend-user" },
   ],
   reviewed: [
     { label: "Ban", nextStage: "banned", endpoint: "/api/ban-user" },
     { label: "Warn", nextStage: "warned", endpoint: "/api/warn-user" },
-    { label: "Suspend", nextStage: "suspended", endpoint: "/api/suspend-user" },
+    // { label: "Suspend", nextStage: "suspended", endpoint: "/api/suspend-user" },
   ],
   banned: [
     { label: "Unban", nextStage: "reviewed", endpoint: "/api/unban-user" },
@@ -25,13 +25,13 @@ const statusActions = {
       endpoint: "/api/remove-warn-user",
     },
     { label: "Ban", nextStage: "banned", endpoint: "/api/ban-user" },
-    { label: "Suspend", nextStage: "suspended", endpoint: "/api/suspend-user" },
+    // { label: "Suspend", nextStage: "suspended", endpoint: "/api/suspend-user" },
   ],
   suspended: [
     {
       label: "Unsuspend",
       nextStage: "reviewed",
-      endpoint: "/api/unsuspend-user",
+      // endpoint: "/api/unsuspend-user",
     },
     { label: "Ban", nextStage: "banned", endpoint: "/api/ban-user" },
   ],
@@ -50,6 +50,8 @@ const ReportedTable = () => {
     nextStage: null,
     label: "",
   });
+
+  const [target, setTarget] = useState({});
 
   const [loading, setLoading] = useState(true);
 
@@ -202,7 +204,17 @@ const ReportedTable = () => {
                   </td>
 
                   <td>
-                    <div className="display-name">{report.reason}</div>
+                    <div className="display-name">
+                      {report.reason == "fake_account"
+                        ? "Fake Account"
+                        : report.reason == "harassment"
+                          ? "Harassment"
+                          : report.reason == "spam"
+                            ? "Spam"
+                            : report.reason == "impersonation"
+                              ? "Impersonation"
+                              : "Other"}
+                    </div>
                   </td>
 
                   <td>
@@ -232,6 +244,7 @@ const ReportedTable = () => {
                                   isOpen: true,
                                   reportId: report.report_id,
                                 });
+                                setTarget(report);
                               } else {
                                 handleStatusAction({
                                   reportId: report.report_id,
@@ -301,6 +314,7 @@ const ReportedTable = () => {
         <ReportTypePopup
           reportId={reportTypePopup.reportId}
           onClose={() => setReportTypePopup({ isOpen: false, reportId: null })}
+          target={target}
           onSubmit={async ({ reportId, type }) => {
             try {
               const res = await apiFetch("/api/ban-user", {
@@ -344,45 +358,33 @@ const ReportedTable = () => {
 
 export default ReportedTable;
 
-const ReportTypePopup = ({ onClose, onSubmit, reportId }) => {
-  const [selectedType, setSelectedType] = useState("");
-
-  const reportTypes = [
-    { value: "spam", label: "Spam / Bot" },
-    { value: "harassment", label: "Harassment" },
-    { value: "copyright", label: "Copyright" },
-    { value: "hate_speech", label: "Hate Speech" },
-    { value: "misinformation", label: "Misinformation" },
-  ];
-
+const ReportTypePopup = ({ onClose, onSubmit, reportId, target }) => {
   return (
     <div className="modal-overlay">
       <div className="modal">
-        <h3>Select Report Type</h3>
-        <div className="report-options">
-          {reportTypes.map((type) => (
-            <label key={type.value} className="report-option">
-              <input
-                type="radio"
-                name="reportType"
-                value={type.value}
-                checked={selectedType === type.value}
-                onChange={(e) => setSelectedType(e.target.value)}
-              />
-              {type.label}
-            </label>
-          ))}
-        </div>
+        <h3>
+          Are you sure to ban {target.username} with reason of{" "}
+          {target.reason == "fake_account"
+            ? "fake Account"
+            : target.reason == "harassment"
+              ? "harassment"
+              : target.reason == "spam"
+                ? "spam"
+                : target.reason == "impersonation"
+                  ? "impersonation"
+                  : "other"}
+          ?
+        </h3>
 
+        <br />
         <div className="modal-actions">
           <button className="btn-cancel" onClick={onClose}>
             Cancel
           </button>
           <button
-            className="btn-confirm"
-            disabled={!selectedType}
+            className="btn-confirm btn-danger"
             onClick={() => {
-              onSubmit({ reportId, type: selectedType });
+              onSubmit({ reportId });
               onClose();
             }}
           >

@@ -149,7 +149,7 @@ export default function Page() {
               <option value="">All Status</option>
               <option value="active">Active</option>
               <option value="banned">Banned</option>
-              <option value="suspended">Suspended</option>
+              {/* <option value="suspended">Suspended</option> */}
               <option value="warned">Warned</option>
             </select>
           </div>
@@ -224,12 +224,12 @@ export default function Page() {
                       {user.isActive && <option value="ban">Ban</option>}
                       {!user.isActive && <option value="unban">Unban</option>}
 
-                      {!user.isSuspended && (
+                      {/* {!user.isSuspended && (
                         <option value="suspend">Suspend</option>
                       )}
                       {user.isSuspended && (
                         <option value="unsuspend">Unsuspend</option>
-                      )}
+                      )} */}
 
                       {!user.isWarned && <option value="warn">Warn</option>}
                       {user.isWarned && (
@@ -275,8 +275,10 @@ export default function Page() {
       {confirmUser && (
         <div className="modal-overlay">
           <div className="modal">
-            <h3>Confirm Action</h3>
-            <p>
+            <h3 style={{ width: "100%", textAlign: "left", padding: "0 10px" }}>
+              Confirm Action
+            </h3>
+            <p style={{ width: "100%", textAlign: "left", padding: "0 10px" }}>
               Are you sure you want to <strong>{confirmUser.action}</strong>{" "}
               {confirmUser.displayName}?
             </p>

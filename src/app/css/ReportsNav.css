@@ -118,3 +118,8 @@
 .btn-suspend:hover {
   background-color: #7b1fa2;
 }
+
+.btn-confirm .btn-danget {
+  background-color: #d32f2f;
+  color: white;
+}
