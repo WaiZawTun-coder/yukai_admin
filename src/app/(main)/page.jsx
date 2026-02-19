@@ -34,6 +34,20 @@ export default function DashboardPage() {
         <Card title="Total Posts" value={data.cards.totalPosts} />
         <Card title="Total Reports" value={data.cards.totalReports} />
         <Card title="Pending Reports" value={data.cards.pendingReports} />
+        <Card title="Total Post Reports" value={data.cards.totalPostReports} />
+        <Card
+          title="Pending Post Reports"
+          value={data.cards.pendingPostReports}
+        />
+        <Card
+          title="Total Account Reports"
+          value={data.cards.totalAccountReports}
+        />
+
+        <Card
+          title="Pending Account Reports"
+          value={data.cards.pendingAccountReports}
+        />
       </div>
 
       {/* CHARTS */}
