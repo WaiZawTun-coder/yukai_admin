@@ -217,7 +217,7 @@ const AdminTable = () => {
                     </span>
                   </td>
                   <td>
-                    {admin.id !== 1 && (
+                    {(admin.id !== 1 || admin.id != authUser.admin_id) && (
                       <button
                         className={
                           admin.status === "Active" ? "btn-ban" : "btn-unban"
