@@ -142,6 +142,8 @@ const AdminTable = () => {
     getAdmin(currentPage);
   }, [apiFetch, getAdmin, currentPage]);
 
+  console.log({ admins });
+
   return (
     <div className="table-main-area">
       <div className="table-container">
@@ -167,7 +169,7 @@ const AdminTable = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
 
-            {authUser.role == "super_admin" && (
+            {authUser.id == "super_admin" && (
               <button
                 className="btn-create-admin"
                 onClick={() => setShowCreateModal(true)}
@@ -215,19 +217,21 @@ const AdminTable = () => {
                     </span>
                   </td>
                   <td>
-                    <button
-                      className={
-                        admin.status === "Active" ? "btn-ban" : "btn-unban"
-                      }
-                      onClick={() => setConfirmAdmin(admin)}
-                    >
-                      {admin.status === "Active" ? "Ban" : "Unban"}
-                    </button>
+                    {admin.id !== 1 && (
+                      <button
+                        className={
+                          admin.status === "Active" ? "btn-ban" : "btn-unban"
+                        }
+                        onClick={() => setConfirmAdmin(admin)}
+                      >
+                        {admin.status === "Active" ? "Ban" : "Unban"}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))
             )}
-            {filteredAdmins.length === 0 && (
+            {filteredAdmins.length === 0 && isLoading && (
               <tr>
                 <td colSpan="6" style={{ textAlign: "center" }}>
                   No admins found
